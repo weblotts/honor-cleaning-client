@@ -61,12 +61,12 @@ const SERVICE_ICONS: Record<string, typeof Building2> = {
 };
 
 const SERVICE_COLORS: Record<string, string> = {
-  office: 'from-brand-500 to-brand-600',
-  retail: 'from-ocean-500 to-ocean-600',
-  medical: 'from-warm-500 to-warm-600',
-  industrial: 'from-violet-500 to-violet-600',
-  postConstruction: 'from-amber-500 to-amber-600',
-  recurring: 'from-violet-500 to-violet-600',
+  office: 'bg-brand-600',
+  retail: 'bg-ocean-600',
+  medical: 'bg-warm-500',
+  industrial: 'bg-violet-600',
+  postConstruction: 'bg-amber-500',
+  recurring: 'bg-violet-600',
 };
 
 const ASSIGNABLE_STATUSES: string[] = [
@@ -469,13 +469,13 @@ export default function JobBoard() {
             const assignedStaff = typeof booking.staffId === 'object' ? booking.staffId : null;
             const statusConf = STATUS_CONFIG[booking.status] || STATUS_CONFIG.pending;
             const ServiceIcon = SERVICE_ICONS[booking.serviceType] || Building2;
-            const serviceColor = SERVICE_COLORS[booking.serviceType] || 'from-gray-500 to-gray-600';
+            const serviceColor = SERVICE_COLORS[booking.serviceType] || 'bg-gray-500';
 
             return (
               <div key={booking._id} className="group rounded-3xl bg-white border border-gray-100 overflow-hidden hover:shadow-lg hover:border-gray-200 transition-all duration-300">
                 <div className="flex items-center justify-between px-6 pt-5 pb-3">
                   <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${serviceColor} flex items-center justify-center shadow-sm`}>
+                    <div className={`w-10 h-10 rounded-xl ${serviceColor} flex items-center justify-center`}>
                       <ServiceIcon className="h-5 w-5 text-white" />
                     </div>
                     <div>
@@ -523,7 +523,7 @@ export default function JobBoard() {
                       </div>
                     ) : assignedStaff ? (
                       <div className="flex items-center gap-2">
-                        <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-brand-400 to-brand-500 flex items-center justify-center text-white text-xs font-bold">
+                        <div className="w-7 h-7 rounded-lg bg-brand-500 flex items-center justify-center text-white text-xs font-bold">
                           {(assignedStaff.name || assignedStaff.email || '?')[0].toUpperCase()}
                         </div>
                         <span className="text-sm text-gray-600 font-medium">{assignedStaff.name || assignedStaff.email}</span>
@@ -565,13 +565,13 @@ export default function JobBoard() {
                   const assignedStaff = typeof booking.staffId === 'object' ? booking.staffId : null;
                   const statusConf = STATUS_CONFIG[booking.status] || STATUS_CONFIG.pending;
                   const ServiceIcon = SERVICE_ICONS[booking.serviceType] || Building2;
-                  const serviceColor = SERVICE_COLORS[booking.serviceType] || 'from-gray-500 to-gray-600';
+                  const serviceColor = SERVICE_COLORS[booking.serviceType] || 'bg-gray-500';
 
                   return (
                     <tr key={booking._id} className="hover:bg-gray-50/50 transition-colors">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${serviceColor} flex items-center justify-center`}>
+                          <div className={`w-8 h-8 rounded-lg ${serviceColor} flex items-center justify-center`}>
                             <ServiceIcon className="h-4 w-4 text-white" />
                           </div>
                           <div>
@@ -604,7 +604,7 @@ export default function JobBoard() {
                           </select>
                         ) : assignedStaff ? (
                           <div className="flex items-center gap-2">
-                            <div className="w-6 h-6 rounded-md bg-gradient-to-br from-brand-400 to-brand-500 flex items-center justify-center text-white text-[10px] font-bold">
+                            <div className="w-6 h-6 rounded-md bg-brand-500 flex items-center justify-center text-white text-[10px] font-bold">
                               {(assignedStaff.name || '?')[0].toUpperCase()}
                             </div>
                             <span className="text-xs text-gray-600">{assignedStaff.name || assignedStaff.email}</span>

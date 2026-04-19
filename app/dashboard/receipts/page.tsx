@@ -122,10 +122,7 @@ export default function CustomerReceiptsPage() {
 
         <div className="bg-white rounded-2xl border border-brand-200 overflow-hidden shadow-sm">
           {/* Header — receipt-style gradient */}
-          <div className="bg-gradient-to-br from-brand-600 via-brand-600 to-emerald-500 px-6 sm:px-8 py-8 text-white relative overflow-hidden">
-            {/* Decorative circles */}
-            <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full" />
-            <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-white/5 rounded-full" />
+          <div className="bg-brand-600 px-6 sm:px-8 py-8 text-white relative overflow-hidden">
 
             <div className="relative flex items-start justify-between">
               <div>
@@ -334,7 +331,7 @@ export default function CustomerReceiptsPage() {
       {/* Empty state */}
       {receipts.length === 0 && (
         <div className="bg-white rounded-2xl border border-gray-100 text-center py-16 px-6">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 mx-auto mb-5">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gray-100 border border-gray-200 mx-auto mb-5">
             <ReceiptIcon className="h-8 w-8 text-gray-300" />
           </div>
           <h3 className="font-bold text-gray-900 text-lg">No receipts yet</h3>
@@ -381,7 +378,7 @@ export default function CustomerReceiptsPage() {
                     className="group w-full bg-white rounded-2xl border border-gray-100 p-4 sm:p-5 flex items-center gap-4 text-left hover:shadow-md hover:border-gray-200 transition-all"
                   >
                     {/* Icon */}
-                    <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-50 to-emerald-50 border border-brand-100 flex items-center justify-center shrink-0 group-hover:from-brand-100 group-hover:to-emerald-100 transition-colors">
+                    <div className="w-11 h-11 rounded-xl bg-brand-50 border border-brand-100 flex items-center justify-center shrink-0 group-hover:bg-brand-100 transition-colors">
                       <CheckCircle className="h-5 w-5 text-brand-600" />
                     </div>
 

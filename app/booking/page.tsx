@@ -143,16 +143,16 @@ const SIZE_PRESETS: Record<string, { label: string; desc: string; sqft: number; 
 const STEPS = ['Service', 'Details', 'When & Where', 'Review'];
 
 const FACILITY_TYPES = [
-  { value: 'office', label: 'Office', desc: 'Corporate, coworking, shared office', icon: Briefcase, color: 'from-brand-500 to-brand-600' },
-  { value: 'retail', label: 'Retail / Storefront', desc: 'Shops, boutiques, showrooms', icon: Store, color: 'from-ocean-500 to-ocean-600' },
-  { value: 'medical', label: 'Medical / Clinic', desc: 'Healthcare, dental, wellness', icon: Stethoscope, color: 'from-warm-500 to-warm-600' },
-  { value: 'industrial', label: 'Industrial / Warehouse', desc: 'Warehouses, factories, depots', icon: Warehouse, color: 'from-violet-500 to-violet-600' },
+  { value: 'office', label: 'Office', desc: 'Corporate, coworking, shared office', icon: Briefcase, color: 'bg-brand-600' },
+  { value: 'retail', label: 'Retail / Storefront', desc: 'Shops, boutiques, showrooms', icon: Store, color: 'bg-ocean-600' },
+  { value: 'medical', label: 'Medical / Clinic', desc: 'Healthcare, dental, wellness', icon: Stethoscope, color: 'bg-warm-500' },
+  { value: 'industrial', label: 'Industrial / Warehouse', desc: 'Warehouses, factories, depots', icon: Warehouse, color: 'bg-violet-600' },
 ];
 
 const SERVICE_LEVELS = [
-  { value: 'standard', label: 'Standard', desc: 'Regular maintenance clean', icon: Briefcase, color: 'from-brand-500 to-brand-600' },
-  { value: 'deep', label: 'Deep Clean', desc: 'Intensive top-to-bottom scrub', icon: SprayCan, color: 'from-ocean-500 to-ocean-600', popular: true },
-  { value: 'postConstruction', label: 'Post-Construction', desc: 'Debris removal & polish', icon: HardHat, color: 'from-warm-500 to-warm-600' },
+  { value: 'standard', label: 'Standard', desc: 'Regular maintenance clean', icon: Briefcase, color: 'bg-brand-600' },
+  { value: 'deep', label: 'Deep Clean', desc: 'Intensive top-to-bottom scrub', icon: SprayCan, color: 'bg-ocean-600', popular: true },
+  { value: 'postConstruction', label: 'Post-Construction', desc: 'Debris removal & polish', icon: HardHat, color: 'bg-warm-500' },
 ];
 
 const FREQUENCY_OPTIONS = [
@@ -233,8 +233,8 @@ function TimeSlotGrid({ scheduledTime, onChange, accentClass = 'brand' }: {
   accentClass?: 'brand' | 'violet';
 }) {
   const activeClass = accentClass === 'violet'
-    ? 'bg-gradient-to-br from-violet-500 to-violet-600 text-white shadow-lg shadow-violet-500/25 scale-[1.03]'
-    : 'bg-gradient-to-br from-brand-500 to-brand-600 text-white shadow-lg shadow-brand-500/25 scale-[1.03]';
+    ? 'bg-violet-600 text-white scale-[1.03]'
+    : 'bg-brand-600 text-white scale-[1.03]';
   const hoverClass = accentClass === 'violet'
     ? 'bg-white text-gray-600 hover:bg-violet-50 hover:text-violet-700 border border-gray-200 hover:border-violet-200'
     : 'bg-white text-gray-600 hover:bg-brand-50 hover:text-brand-700 border border-gray-200 hover:border-brand-200';
@@ -419,7 +419,7 @@ export default function BookingPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-50 pt-20 sm:pt-24 pb-12 sm:pb-16">
+      <main className="min-h-screen bg-gray-50 pt-20 sm:pt-24 pb-12 sm:pb-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6" ref={formRef}>
 
           {/* Header */}
@@ -430,7 +430,7 @@ export default function BookingPage() {
             </div>
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 font-display">
               Get Your{' '}
-              <span className="bg-gradient-to-r from-brand-600 to-ocean-600 bg-clip-text text-transparent">Free Quote</span>
+              <span className="text-brand-600">Free Quote</span>
             </h1>
             <p className="mt-2 text-gray-500 text-sm sm:text-base">
               Tell us about your facility and we&apos;ll send a custom cleaning proposal
@@ -447,7 +447,7 @@ export default function BookingPage() {
               </div>
               <div className="h-1.5 rounded-full bg-gray-100 overflow-hidden">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-brand-500 to-brand-400 transition-all duration-500 ease-out"
+                  className="h-full rounded-full bg-brand-500 transition-all duration-500 ease-out"
                   style={{ width: `${stepProgress()}%` }}
                 />
               </div>
@@ -465,7 +465,7 @@ export default function BookingPage() {
                         i < step
                           ? 'bg-brand-500 text-white shadow-md shadow-brand-500/30 cursor-pointer hover:bg-brand-600'
                           : i === step
-                            ? 'bg-gradient-to-br from-brand-500 to-brand-600 text-white shadow-lg shadow-brand-500/30 scale-110'
+                            ? 'bg-brand-600 text-white scale-110'
                             : 'bg-gray-100 text-gray-400 cursor-not-allowed'
                       }`}
                     >
@@ -481,7 +481,7 @@ export default function BookingPage() {
                     <div className="flex-1 mx-3 mt-[-0.25rem]">
                       <div className="h-1 rounded-full bg-gray-100 overflow-hidden">
                         <div
-                          className={`h-full rounded-full bg-gradient-to-r from-brand-500 to-brand-400 transition-all duration-500 ${
+                          className={`h-full rounded-full bg-brand-500 transition-all duration-500 ${
                             i < step ? 'w-full' : 'w-0'
                           }`}
                         />
@@ -518,7 +518,7 @@ export default function BookingPage() {
                                 : 'border-gray-100 hover:border-gray-200 hover:shadow-sm'
                             }`}
                           >
-                            <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${ft.color} flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform mb-3`}>
+                            <div className={`w-12 h-12 rounded-xl ${ft.color} flex items-center justify-center group-hover:scale-105 transition-transform mb-3`}>
                               <ft.icon className="h-6 w-6 text-white" />
                             </div>
                             <p className="font-bold text-gray-900">{ft.label}</p>
@@ -547,7 +547,7 @@ export default function BookingPage() {
                               {lvl.popular && (
                                 <span className="absolute -top-2.5 right-3 text-[10px] font-bold bg-warm-100 text-warm-700 px-2 py-0.5 rounded-full">POPULAR</span>
                               )}
-                              <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${lvl.color} flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform mb-2`}>
+                              <div className={`w-10 h-10 rounded-xl ${lvl.color} flex items-center justify-center group-hover:scale-105 transition-transform mb-2`}>
                                 <lvl.icon className="h-5 w-5 text-white" />
                               </div>
                               <p className="font-bold text-gray-900 text-sm">{lvl.label}</p>
@@ -620,7 +620,7 @@ export default function BookingPage() {
                   <div>
                     <div className="flex items-center gap-3 mb-1">
                       {selectedFacility && (
-                        <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${selectedFacility.color} flex items-center justify-center shadow-md`}>
+                        <div className={`w-10 h-10 rounded-xl ${selectedFacility.color} flex items-center justify-center`}>
                           <selectedFacility.icon className="h-5 w-5 text-white" />
                         </div>
                       )}
@@ -910,8 +910,8 @@ export default function BookingPage() {
                       {/* Contextual tip */}
                       <div className={`rounded-2xl p-4 flex items-start gap-3 ${
                         form.facilityType === 'medical'
-                          ? 'bg-gradient-to-r from-warm-50 to-orange-50 border border-warm-100'
-                          : 'bg-gradient-to-r from-ocean-50 to-brand-50 border border-ocean-100'
+                          ? 'bg-warm-50 border border-warm-100'
+                          : 'bg-ocean-50 border border-ocean-100'
                       }`}>
                         <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
                           form.facilityType === 'medical' ? 'bg-warm-100' : 'bg-ocean-100'
@@ -1033,7 +1033,7 @@ export default function BookingPage() {
                                   onClick={() => setForm({ ...form, preferredDay: day.value })}
                                   className={`py-3 rounded-xl text-sm font-semibold transition-all duration-200 ${
                                     form.preferredDay === day.value
-                                      ? 'bg-gradient-to-br from-violet-500 to-violet-600 text-white shadow-lg shadow-violet-500/25 scale-[1.03]'
+                                      ? 'bg-violet-600 text-white scale-[1.03]'
                                       : 'bg-white text-gray-600 hover:bg-violet-50 hover:text-violet-700 border border-gray-200 hover:border-violet-200'
                                   }`}
                                 >
@@ -1147,7 +1147,7 @@ export default function BookingPage() {
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-brand-50 to-ocean-50 border border-brand-100">
+                        <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-brand-50 border border-brand-100">
                           <div className="w-8 h-8 rounded-lg bg-brand-500 flex items-center justify-center shrink-0">
                             <MapPin className="h-4 w-4 text-white" />
                           </div>
@@ -1186,7 +1186,7 @@ export default function BookingPage() {
 
                     <div className="rounded-2xl border border-gray-100 overflow-hidden">
                       {/* Service header */}
-                      <div className={`bg-gradient-to-r ${selectedFacility.color} p-4 sm:p-5 flex items-center gap-3 sm:gap-4`}>
+                      <div className={`${selectedFacility.color} p-4 sm:p-5 flex items-center gap-3 sm:gap-4`}>
                         <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/20 flex items-center justify-center shrink-0">
                           <selectedFacility.icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                         </div>
@@ -1358,7 +1358,7 @@ export default function BookingPage() {
                     <button
                       onClick={handleSubmit}
                       disabled={loading}
-                      className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-gradient-to-r from-brand-500 to-brand-600 text-white font-bold rounded-xl shadow-lg shadow-brand-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 w-full sm:w-auto"
+                      className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-brand-600 text-white font-bold rounded-xl hover:bg-brand-700 transition-colors duration-200 disabled:opacity-50 w-full sm:w-auto"
                     >
                       {loading ? (
                         <>
@@ -1388,7 +1388,7 @@ export default function BookingPage() {
                   <div className="space-y-3 text-sm">
                     <div className="flex justify-between items-center">
                       <div className="flex items-center gap-2">
-                        <div className={`w-6 h-6 rounded-md bg-gradient-to-br ${selectedFacility.color} flex items-center justify-center`}>
+                        <div className={`w-6 h-6 rounded-md ${selectedFacility.color} flex items-center justify-center`}>
                           <selectedFacility.icon className="h-3.5 w-3.5 text-white" />
                         </div>
                         <span className="text-gray-700 font-medium">{selectedFacility.label}</span>

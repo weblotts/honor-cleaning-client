@@ -17,7 +17,6 @@ import {
   Star,
   Phone,
   Zap,
-
   CalendarCheck,
 } from 'lucide-react';
 
@@ -33,39 +32,34 @@ const values = [
     title: 'Reliability',
     description:
       'We show up on time, every time. Our clients trust us with their spaces because we never cut corners.',
-    color: 'from-brand-500 to-brand-600',
+    bg: 'bg-brand-600',
     bgLight: 'bg-brand-50',
-    iconColor: 'text-brand-600',
   },
   {
     icon: Leaf,
     title: 'Eco-Friendly',
     description:
       'We use non-toxic, environmentally responsible products that are safe for your team and the planet.',
-    color: 'from-emerald-500 to-emerald-600',
+    bg: 'bg-emerald-600',
     bgLight: 'bg-emerald-50',
-    iconColor: 'text-emerald-600',
   },
   {
     icon: Heart,
     title: 'Integrity',
     description:
       'Honest pricing, transparent communication, and a genuine commitment to doing right by every client.',
-    color: 'from-warm-500 to-warm-600',
+    bg: 'bg-warm-500',
     bgLight: 'bg-amber-50',
-    iconColor: 'text-amber-600',
   },
   {
     icon: Award,
     title: 'Excellence',
     description:
-      'We hold ourselves to the highest standards. If you\'re not 100% satisfied, we\'ll re-clean for free.',
-    color: 'from-ocean-500 to-ocean-600',
+      "We hold ourselves to the highest standards. If you're not 100% satisfied, we'll re-clean for free.",
+    bg: 'bg-ocean-600',
     bgLight: 'bg-ocean-50',
-    iconColor: 'text-ocean-600',
   },
 ];
-
 
 const milestones = [
   {
@@ -108,7 +102,7 @@ const whyChooseUs = [
   {
     icon: Star,
     title: 'Quality Guaranteed',
-    description: 'Not satisfied? We\'ll come back and re-clean at no extra cost.',
+    description: "Not satisfied? We'll come back and re-clean at no extra cost.",
   },
   {
     icon: Users,
@@ -133,64 +127,17 @@ export default function AboutPage() {
       <Navbar />
 
       {/* Hero */}
-      <section className="relative min-h-[85vh] flex items-center overflow-hidden">
-        {/* Layered background */}
-        <div className="absolute inset-0 bg-brand-950" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(16,185,129,0.12),transparent)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_80%_60%,rgba(59,130,246,0.08),transparent)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_40%_at_10%_80%,rgba(245,158,11,0.05),transparent)]" />
-
-        {/* Animated orbs */}
-        <div className="absolute top-[-10%] right-[15%] w-[600px] h-[600px] bg-gradient-to-bl from-brand-500/15 via-ocean-500/8 to-transparent rounded-full blur-[100px] animate-float" />
-        <div className="absolute bottom-[-10%] left-[10%] w-[400px] h-[400px] bg-gradient-to-tr from-warm-500/8 via-brand-400/5 to-transparent rounded-full blur-[80px] animate-float-delayed" />
-
-        {/* Noise texture */}
-        <div
-          className="absolute inset-0 opacity-[0.025]"
-          style={{
-            backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
-            backgroundSize: '40px 40px',
-          }}
-        />
-
-        {/* Horizontal light streak */}
-        <div className="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-400/15 to-transparent" />
-
+      <section className="relative min-h-[85vh] flex items-center bg-brand-950">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24 w-full">
-          {/* Centered text content */}
           <div className="max-w-3xl mx-auto text-center animate-slide-up">
-            <div className="inline-flex items-center gap-2 bg-white/[0.06] backdrop-blur-md text-brand-200 text-sm font-medium px-5 py-2.5 rounded-full mb-8 border border-white/[0.08]">
+            <div className="inline-flex items-center gap-2 bg-white/[0.06] text-brand-200 text-sm font-medium px-5 py-2.5 rounded-full mb-8 border border-white/[0.08]">
               <Sparkles className="h-4 w-4 text-brand-400" />
               About Honor Cleaning Co.
             </div>
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white font-display leading-[1.05] tracking-tight mb-6">
               Cleaning with{' '}
-              <span className="relative inline-block">
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-300 via-emerald-200 to-warm-300">
-                  Honor & Care
-                </span>
-                <svg
-                  className="absolute -bottom-2 left-0 w-full h-3"
-                  viewBox="0 0 280 12"
-                  fill="none"
-                  preserveAspectRatio="none"
-                >
-                  <path
-                    d="M2 8C40 3 80 1 140 5C200 9 240 3 278 7"
-                    stroke="url(#about-underline)"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                  />
-                  <defs>
-                    <linearGradient id="about-underline" x1="0" y1="0" x2="280" y2="0">
-                      <stop stopColor="#6ee7b7" stopOpacity="0.6" />
-                      <stop offset="0.5" stopColor="#34d399" stopOpacity="0.8" />
-                      <stop offset="1" stopColor="#fcd34d" stopOpacity="0.5" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-              </span>
+              <span className="text-brand-400">Honor &amp; Care</span>
             </h1>
 
             <p className="text-lg md:text-xl text-brand-100/60 leading-relaxed max-w-2xl mx-auto mb-10">
@@ -201,17 +148,14 @@ export default function AboutPage() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/booking"
-                className="group relative inline-flex items-center gap-2.5 px-9 py-4.5 bg-gradient-to-r from-brand-400 to-brand-500 text-brand-950 font-bold rounded-2xl text-lg shadow-xl shadow-brand-500/25 hover:shadow-2xl hover:shadow-brand-400/40 hover:-translate-y-0.5 transition-all duration-300 overflow-hidden"
+                className="inline-flex items-center gap-2.5 px-9 py-4.5 bg-brand-500 text-white font-bold rounded-2xl text-lg hover:bg-brand-400 transition-colors duration-200"
               >
-                <span className="relative z-10 flex items-center gap-2.5">
-                  Get a Free Quote
-                  <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-brand-300 to-brand-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                Get a Free Quote
+                <ArrowRight className="h-5 w-5" />
               </Link>
               <Link
                 href="tel:+15083331838"
-                className="inline-flex items-center gap-2 px-9 py-4.5 text-white/90 font-semibold rounded-2xl text-lg border border-white/15 hover:bg-white/[0.08] hover:border-white/25 hover:-translate-y-0.5 transition-all duration-300 backdrop-blur-sm"
+                className="inline-flex items-center gap-2 px-9 py-4.5 text-white/90 font-semibold rounded-2xl text-lg border border-white/15 hover:bg-white/[0.08] hover:border-white/25 transition-all duration-200"
               >
                 <Phone className="h-4 w-4" />
                 (508) 333-1838
@@ -231,10 +175,8 @@ export default function AboutPage() {
                 Our Story
               </div>
               <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 font-display mb-6">
-                Built on Hard Work &{' '}
-                <span className="bg-gradient-to-r from-brand-600 to-ocean-600 bg-clip-text text-transparent">
-                  Honest Service
-                </span>
+                Built on Hard Work &amp;{' '}
+                <span className="text-brand-600">Honest Service</span>
               </h2>
               <div className="space-y-4 text-gray-600 leading-relaxed">
                 <p>
@@ -257,10 +199,8 @@ export default function AboutPage() {
             </div>
 
             <div className="relative">
-              <div className="bg-gradient-to-br from-brand-50 to-ocean-50 rounded-3xl p-10 relative">
-                <div className="absolute -top-4 -right-4 w-20 h-20 bg-brand-500/10 rounded-full blur-2xl" />
-                <div className="absolute -bottom-4 -left-4 w-24 h-24 bg-ocean-500/10 rounded-full blur-2xl" />
-                <div className="relative space-y-6">
+              <div className="bg-gray-50 rounded-3xl p-10 relative">
+                <div className="space-y-6">
                   {[
                     { icon: Target, text: 'Customized cleaning plans for every facility' },
                     { icon: Shield, text: 'Fully licensed and insured in Massachusetts' },
@@ -269,7 +209,7 @@ export default function AboutPage() {
                     { icon: CheckCircle, text: '100% satisfaction guarantee on every job' },
                   ].map((item) => (
                     <div key={item.text} className="flex items-start gap-4 group">
-                      <div className="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center shrink-0 group-hover:shadow-md group-hover:scale-105 transition-all duration-300">
+                      <div className="w-10 h-10 rounded-xl bg-white shadow-sm border border-gray-100 flex items-center justify-center shrink-0 group-hover:shadow-md transition-shadow duration-300">
                         <item.icon className="h-5 w-5 text-brand-600" />
                       </div>
                       <p className="text-gray-700 font-medium pt-2">{item.text}</p>
@@ -302,15 +242,14 @@ export default function AboutPage() {
             {milestones.map((milestone, index) => (
               <div key={milestone.title} className="relative group">
                 <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 h-full">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center mb-5 shadow-lg shadow-brand-500/20 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-12 h-12 rounded-2xl bg-brand-600 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
                     <span className="text-white font-extrabold text-sm font-display">{milestone.year}</span>
                   </div>
                   <h3 className="text-lg font-bold text-gray-900 font-display mb-2">{milestone.title}</h3>
                   <p className="text-gray-500 text-sm leading-relaxed">{milestone.description}</p>
                 </div>
-                {/* Connector line (hidden on last item and mobile) */}
                 {index < milestones.length - 1 && (
-                  <div className="hidden lg:block absolute top-12 left-full w-6 h-0.5 bg-gradient-to-r from-brand-200 to-brand-100 z-10 -translate-x-3" />
+                  <div className="hidden lg:block absolute top-12 left-full w-6 h-0.5 bg-brand-200 z-10 -translate-x-3" />
                 )}
               </div>
             ))}
@@ -341,10 +280,9 @@ export default function AboutPage() {
                 key={value.title}
                 className="group bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 relative overflow-hidden"
               >
-                {/* Hover gradient background */}
                 <div className={`absolute inset-0 ${value.bgLight} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
                 <div className="relative">
-                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${value.color} flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                  <div className={`w-14 h-14 rounded-2xl ${value.bg} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300`}>
                     <value.icon className="h-7 w-7 text-white" />
                   </div>
                   <h3 className="text-lg font-bold text-gray-900 font-display mb-2">{value.title}</h3>
@@ -391,11 +329,8 @@ export default function AboutPage() {
       {/* Service Area */}
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-3xl p-10 md:p-16 relative overflow-hidden">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(34,197,94,0.1),transparent_60%)]" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(59,130,246,0.08),transparent_60%)]" />
-
-            <div className="relative grid lg:grid-cols-2 gap-12 items-center">
+          <div className="bg-gray-900 rounded-3xl p-10 md:p-16 relative overflow-hidden">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
                 <div className="inline-flex items-center gap-2 bg-brand-500/10 border border-brand-500/20 text-brand-400 text-sm font-medium px-4 py-2 rounded-full mb-6">
                   <MapPin className="h-4 w-4" />
@@ -403,9 +338,7 @@ export default function AboutPage() {
                 </div>
                 <h2 className="text-3xl md:text-4xl font-extrabold text-white font-display mb-6">
                   Proudly Serving the{' '}
-                  <span className="bg-gradient-to-r from-brand-400 to-ocean-400 bg-clip-text text-transparent">
-                    Greater Boston Area
-                  </span>
+                  <span className="text-brand-400">Greater Boston Area</span>
                 </h2>
                 <p className="text-gray-400 leading-relaxed mb-8">
                   Our home base is located at <strong className="text-white">738 Main St, Waltham, MA 02451</strong>.
@@ -427,7 +360,7 @@ export default function AboutPage() {
                       <Building2 className="h-5 w-5 text-ocean-400" />
                     </div>
                     <div>
-                      <p className="text-white font-medium">Greater Boston & Surrounding Towns</p>
+                      <p className="text-white font-medium">Greater Boston &amp; Surrounding Towns</p>
                       <p className="text-xs text-gray-500">20+ communities served</p>
                     </div>
                   </div>
@@ -455,12 +388,7 @@ export default function AboutPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 bg-gradient-to-br from-brand-600 via-brand-700 to-brand-800 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.1),transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(59,130,246,0.15),transparent_50%)]" />
-        <div className="absolute top-0 left-0 w-72 h-72 bg-white/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-ocean-500/10 rounded-full blur-3xl" />
-
+      <section className="py-24 bg-brand-700">
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white text-sm font-medium px-4 py-2 rounded-full mb-6">
             <Sparkles className="h-4 w-4" />
@@ -476,14 +404,14 @@ export default function AboutPage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/booking"
-              className="group inline-flex items-center gap-2 bg-white text-brand-700 font-semibold px-8 py-4 rounded-xl text-base hover:bg-gray-50 shadow-lg shadow-brand-900/20 transition-all duration-300 hover:-translate-y-0.5"
+              className="inline-flex items-center gap-2 bg-white text-brand-700 font-semibold px-8 py-4 rounded-xl text-base hover:bg-gray-50 transition-colors duration-200"
             >
               Get a Free Quote
-              <ArrowRight className="h-5 w-5 group-hover:translate-x-0.5 transition-transform" />
+              <ArrowRight className="h-5 w-5" />
             </Link>
             <Link
               href="tel:+15083331838"
-              className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white font-semibold px-8 py-4 rounded-xl text-base hover:bg-white/20 transition-all duration-300"
+              className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white font-semibold px-8 py-4 rounded-xl text-base hover:bg-white/20 transition-colors duration-200"
             >
               <Phone className="h-4 w-4" />
               Call (508) 333-1838

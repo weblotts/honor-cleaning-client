@@ -133,7 +133,7 @@ export default function CustomerSubscriptionsPage() {
       {upcoming.length > 0 && (
         <section>
           <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center">
               <DollarSign className="h-4 w-4 text-white" />
             </div>
             Upcoming Payments
@@ -172,7 +172,7 @@ export default function CustomerSubscriptionsPage() {
       {active.length > 0 && (
         <section>
           <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-green-600 flex items-center justify-center">
               <RefreshCw className="h-4 w-4 text-white" />
             </div>
             Active ({active.length})
@@ -253,7 +253,7 @@ export default function CustomerSubscriptionsPage() {
       {paused.length > 0 && (
         <section>
           <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center">
               <Pause className="h-4 w-4 text-white" />
             </div>
             Paused ({paused.length})
@@ -324,7 +324,7 @@ export default function CustomerSubscriptionsPage() {
       {cancelled.length > 0 && (
         <section>
           <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-gray-400 to-gray-500 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-gray-400 flex items-center justify-center">
               <XCircle className="h-4 w-4 text-white" />
             </div>
             Cancelled ({cancelled.length})

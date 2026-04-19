@@ -188,7 +188,7 @@ export default function CustomerInvoicesPage() {
 
           {/* ── Header: receipt-style when paid, standard when unpaid ── */}
           {isPaid ? (
-            <div className="bg-gradient-to-br from-brand-600 via-brand-600 to-emerald-500 px-6 sm:px-8 py-8 text-white">
+            <div className="bg-brand-600 px-6 sm:px-8 py-8 text-white">
               <div className="flex items-start justify-between">
                 <div>
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-sm mb-4">
@@ -438,7 +438,7 @@ export default function CustomerInvoicesPage() {
       {unpaid.length > 0 && (
         <section>
           <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center">
               <DollarSign className="h-4 w-4 text-white" />
             </div>
             Awaiting Payment ({unpaid.length})
@@ -468,7 +468,7 @@ export default function CustomerInvoicesPage() {
       {overdue.length > 0 && (
         <section>
           <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-red-500 flex items-center justify-center">
               <AlertTriangle className="h-4 w-4 text-white" />
             </div>
             Overdue ({overdue.length})
@@ -494,7 +494,7 @@ export default function CustomerInvoicesPage() {
       {paid.length > 0 && (
         <section>
           <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-green-600 flex items-center justify-center">
               <CheckCircle className="h-4 w-4 text-white" />
             </div>
             Paid ({paid.length})

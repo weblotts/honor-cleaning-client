@@ -24,8 +24,6 @@ import {
   Users,
 } from "lucide-react";
 
-/* ── Data ── */
-
 const services = [
   {
     title: "Office Cleaning",
@@ -39,7 +37,7 @@ const services = [
       "Trash & recycling removal",
     ],
     icon: Briefcase,
-    color: "from-brand-500 to-brand-600",
+    bg: "bg-brand-600",
   },
   {
     title: "Retail & Storefront",
@@ -54,7 +52,7 @@ const services = [
     ],
     popular: true,
     icon: Store,
-    color: "from-ocean-500 to-ocean-600",
+    bg: "bg-ocean-600",
   },
   {
     title: "Medical & Clinic",
@@ -68,7 +66,7 @@ const services = [
       "Biohazard-safe protocols",
     ],
     icon: Stethoscope,
-    color: "from-warm-500 to-warm-600",
+    bg: "bg-warm-500",
   },
   {
     title: "Industrial & Warehouse",
@@ -82,7 +80,7 @@ const services = [
       "Post-construction cleanup",
     ],
     icon: Warehouse,
-    color: "from-violet-500 to-violet-600",
+    bg: "bg-violet-500",
   },
 ];
 
@@ -93,7 +91,7 @@ const howItWorks = [
     description:
       "Tell us about your facility and get a custom cleaning proposal. Takes under 2 minutes.",
     icon: CalendarCheck,
-    color: "from-brand-500 to-brand-400",
+    bg: "bg-brand-600",
   },
   {
     step: "02",
@@ -101,7 +99,7 @@ const howItWorks = [
     description:
       "We assess your space and send a tailored cleaning plan and quote within 24 hours. You approve before we start.",
     icon: FileText,
-    color: "from-ocean-500 to-ocean-400",
+    bg: "bg-ocean-600",
   },
   {
     step: "03",
@@ -109,11 +107,9 @@ const howItWorks = [
     description:
       "Our insured, background-checked team arrives on schedule. Not satisfied? Free re-clean within 24 hours.",
     icon: Building2,
-    color: "from-warm-500 to-warm-400",
+    bg: "bg-warm-500",
   },
 ];
-
-/* ── Page ── */
 
 export default function HomePage() {
   return (
@@ -121,45 +117,22 @@ export default function HomePage() {
       <Navbar />
       <main className="overflow-hidden">
         {/* ── HERO ── */}
-        <section className="relative min-h-screen flex items-center overflow-hidden">
-          {/* Layered gradient background */}
-          <div className="absolute inset-0 bg-brand-950" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(16,185,129,0.15),transparent)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_80%_50%,rgba(59,130,246,0.08),transparent)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_40%_at_20%_80%,rgba(245,158,11,0.06),transparent)]" />
-
-          {/* Animated orbs */}
-          <div className="absolute top-[-10%] right-[10%] w-[700px] h-[700px] bg-gradient-to-bl from-brand-500/20 via-ocean-500/10 to-transparent rounded-full blur-[100px] animate-float" />
-          <div className="absolute bottom-[-15%] left-[5%] w-[500px] h-[500px] bg-gradient-to-tr from-warm-500/10 via-brand-400/5 to-transparent rounded-full blur-[80px] animate-float-delayed" />
-
-          {/* Noise texture */}
-          <div
-            className="absolute inset-0 opacity-[0.025]"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
-              backgroundSize: "40px 40px",
-            }}
-          />
-
-          {/* Horizontal light streak */}
-          <div className="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-400/20 to-transparent" />
-
+        <section className="relative min-h-screen flex items-center bg-brand-950">
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 lg:py-36 w-full">
             <div className="grid lg:grid-cols-12 gap-16 lg:gap-12 items-center">
-              {/* ── Left: Text content ── */}
+              {/* Left: Text content */}
               <div className="lg:col-span-7 animate-slide-up">
-                {/* Trust badges row */}
+                {/* Trust badges */}
                 <div className="flex flex-wrap items-center gap-3 mb-10">
-                  <div className="inline-flex items-center gap-2 bg-white/[0.06] backdrop-blur-md text-brand-200 text-xs font-medium px-4 py-2 rounded-full border border-white/[0.08]">
+                  <div className="inline-flex items-center gap-2 bg-white/[0.06] text-brand-200 text-xs font-medium px-4 py-2 rounded-full border border-white/[0.08]">
                     <Shield className="h-3.5 w-3.5 text-brand-400" />
                     Licensed &amp; Insured
                   </div>
-                  <div className="inline-flex items-center gap-2 bg-white/[0.06] backdrop-blur-md text-brand-200 text-xs font-medium px-4 py-2 rounded-full border border-white/[0.08]">
+                  <div className="inline-flex items-center gap-2 bg-white/[0.06] text-brand-200 text-xs font-medium px-4 py-2 rounded-full border border-white/[0.08]">
                     <Leaf className="h-3.5 w-3.5 text-emerald-400" />
                     Eco-Friendly
                   </div>
-                  <div className="inline-flex items-center gap-2 bg-white/[0.06] backdrop-blur-md text-brand-200 text-xs font-medium px-4 py-2 rounded-full border border-white/[0.08]">
+                  <div className="inline-flex items-center gap-2 bg-white/[0.06] text-brand-200 text-xs font-medium px-4 py-2 rounded-full border border-white/[0.08]">
                     <CheckCircle className="h-3.5 w-3.5 text-warm-400" />
                     100% Satisfaction
                   </div>
@@ -168,36 +141,8 @@ export default function HomePage() {
                 <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-[1.05] tracking-tight font-display">
                   Commercial Clean,
                   <br />
-                  <span className="relative inline-block mt-2">
-                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-300 via-emerald-200 to-warm-300">
-                      Professional Results
-                    </span>
-                    <svg
-                      className="absolute -bottom-2 left-0 w-full h-3"
-                      viewBox="0 0 280 12"
-                      fill="none"
-                      preserveAspectRatio="none"
-                    >
-                      <path
-                        d="M2 8C40 3 80 1 140 5C200 9 240 3 278 7"
-                        stroke="url(#hero-underline)"
-                        strokeWidth="3"
-                        strokeLinecap="round"
-                      />
-                      <defs>
-                        <linearGradient
-                          id="hero-underline"
-                          x1="0"
-                          y1="0"
-                          x2="280"
-                          y2="0"
-                        >
-                          <stop stopColor="#6ee7b7" stopOpacity="0.6" />
-                          <stop offset="0.5" stopColor="#34d399" stopOpacity="0.8" />
-                          <stop offset="1" stopColor="#fcd34d" stopOpacity="0.5" />
-                        </linearGradient>
-                      </defs>
-                    </svg>
+                  <span className="text-brand-400 mt-2 inline-block">
+                    Professional Results
                   </span>
                 </h1>
 
@@ -211,17 +156,14 @@ export default function HomePage() {
                 <div className="mt-10 flex flex-wrap gap-4">
                   <Link
                     href="/booking"
-                    className="group relative inline-flex items-center gap-2.5 px-9 py-4.5 bg-gradient-to-r from-brand-400 to-brand-500 text-brand-950 font-bold rounded-2xl text-lg shadow-xl shadow-brand-500/25 hover:shadow-2xl hover:shadow-brand-400/40 hover:-translate-y-0.5 transition-all duration-300 overflow-hidden"
+                    className="inline-flex items-center gap-2.5 px-9 py-4.5 bg-brand-500 text-white font-bold rounded-2xl text-lg hover:bg-brand-400 transition-colors duration-200"
                   >
-                    <span className="relative z-10 flex items-center gap-2.5">
-                      Get a Free Quote
-                      <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                    </span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-brand-300 to-brand-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    Get a Free Quote
+                    <ArrowRight className="h-5 w-5" />
                   </Link>
                   <Link
                     href="/#services"
-                    className="inline-flex items-center gap-2 px-9 py-4.5 text-white/90 font-semibold rounded-2xl text-lg border border-white/15 hover:bg-white/[0.08] hover:border-white/25 hover:-translate-y-0.5 transition-all duration-300 backdrop-blur-sm"
+                    className="inline-flex items-center gap-2 px-9 py-4.5 text-white/90 font-semibold rounded-2xl text-lg border border-white/15 hover:bg-white/[0.08] hover:border-white/25 transition-all duration-200"
                   >
                     Our Services
                   </Link>
@@ -231,19 +173,17 @@ export default function HomePage() {
                 <div className="mt-14 flex flex-wrap items-center gap-6">
                   <div className="flex items-center gap-4">
                     <div className="flex -space-x-2.5">
-                      {["M", "D", "R", "K"].map((initial, i) => (
+                      {[
+                        { initial: "M", bg: "bg-brand-500" },
+                        { initial: "D", bg: "bg-ocean-500" },
+                        { initial: "R", bg: "bg-warm-500" },
+                        { initial: "K", bg: "bg-violet-500" },
+                      ].map((item, i) => (
                         <div
                           key={i}
-                          className={`w-10 h-10 rounded-full border-[2.5px] border-brand-950 flex items-center justify-center text-xs font-bold text-white bg-gradient-to-br shadow-lg ${
-                            [
-                              "from-brand-400 to-brand-500",
-                              "from-ocean-400 to-ocean-500",
-                              "from-warm-400 to-warm-500",
-                              "from-violet-400 to-violet-500",
-                            ][i]
-                          }`}
+                          className={`w-10 h-10 rounded-full border-[2.5px] border-brand-950 flex items-center justify-center text-xs font-bold text-white ${item.bg}`}
                         >
-                          {initial}
+                          {item.initial}
                         </div>
                       ))}
                     </div>
@@ -272,19 +212,16 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* ── Right: Visual showcase ── */}
+              {/* Right: Visual showcase */}
               <div className="hidden lg:block lg:col-span-5">
                 <div className="relative w-full h-[560px]">
-                  {/* Glow behind cards */}
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-brand-500/20 rounded-full blur-[80px]" />
-
                   {/* Main job card */}
-                  <div className="absolute top-6 left-0 right-0 bg-white/[0.07] backdrop-blur-2xl rounded-3xl border border-white/[0.1] shadow-2xl shadow-black/20 animate-float overflow-hidden">
-                    <div className="h-1 bg-gradient-to-r from-brand-400 via-emerald-400 to-warm-400" />
+                  <div className="absolute top-6 left-0 right-0 bg-white/[0.07] rounded-3xl border border-white/[0.1] overflow-hidden">
+                    <div className="h-1 bg-brand-500" />
                     <div className="p-6">
                       <div className="flex items-center justify-between mb-5">
                         <div className="flex items-center gap-3">
-                          <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-500 flex items-center justify-center shadow-lg shadow-brand-500/30">
+                          <div className="w-11 h-11 rounded-2xl bg-brand-600 flex items-center justify-center">
                             <Building2 className="h-5 w-5 text-white" />
                           </div>
                           <div>
@@ -336,16 +273,16 @@ export default function HomePage() {
                           <span className="text-brand-300/60 font-medium">50%</span>
                         </div>
                         <div className="h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
-                          <div className="h-full w-1/2 bg-gradient-to-r from-brand-400 to-emerald-400 rounded-full shimmer" />
+                          <div className="h-full w-1/2 bg-brand-500 rounded-full" />
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Review badge — bottom left */}
-                  <div className="absolute bottom-20 -left-4 bg-white rounded-2xl p-4 shadow-2xl shadow-black/15 animate-float-delayed border border-gray-100/80">
+                  {/* Review badge */}
+                  <div className="absolute bottom-20 -left-4 bg-white rounded-2xl p-4 shadow-xl animate-float-delayed border border-gray-100">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-warm-100 to-warm-50 flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-xl bg-warm-50 flex items-center justify-center">
                         <Star className="h-5 w-5 text-warm-500 fill-warm-500" />
                       </div>
                       <div>
@@ -367,8 +304,8 @@ export default function HomePage() {
                     </div>
                   </div>
 
-                  {/* Stats badge — bottom right */}
-                  <div className="absolute bottom-6 right-0 bg-gradient-to-br from-brand-500 to-brand-600 rounded-2xl p-4 shadow-2xl shadow-brand-600/30 animate-float-delayed">
+                  {/* Stats badge */}
+                  <div className="absolute bottom-6 right-0 bg-brand-600 rounded-2xl p-4 animate-float-delayed">
                     <p className="text-white/60 text-[10px] uppercase tracking-wider font-medium">
                       Businesses Served
                     </p>
@@ -418,7 +355,7 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="section-heading">
-                How It <span className="gradient-text">Works</span>
+                How It <span className="text-brand-600">Works</span>
               </h2>
               <p className="section-subheading">
                 Get your facility professionally cleaned in 3 simple steps. No
@@ -435,7 +372,7 @@ export default function HomePage() {
                   <div className="relative text-center">
                     <div className="relative inline-block">
                       <div
-                        className={`w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br ${item.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-all duration-300`}
+                        className={`w-20 h-20 mx-auto rounded-3xl ${item.bg} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}
                       >
                         <item.icon className="h-9 w-9 text-white" />
                       </div>
@@ -459,12 +396,12 @@ export default function HomePage() {
         {/* ── SERVICES ── */}
         <section
           id="services"
-          className="py-24 bg-gradient-to-b from-gray-50 to-white"
+          className="py-24 bg-gray-50"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="section-heading">
-                Our <span className="gradient-text">Services</span>
+                Our <span className="text-brand-600">Services</span>
               </h2>
               <p className="section-subheading">
                 Tailored commercial cleaning solutions for every type of
@@ -479,23 +416,21 @@ export default function HomePage() {
               {services.map((service) => (
                 <div
                   key={service.title}
-                  className={`relative rounded-3xl p-7 transition-all duration-300 hover:-translate-y-2 flex flex-col ${
+                  className={`relative rounded-3xl p-7 transition-all duration-300 hover:-translate-y-1 flex flex-col ${
                     service.popular
-                      ? "bg-gradient-to-b from-ocean-600 to-ocean-700 text-white shadow-2xl shadow-ocean-500/30 lg:scale-105"
-                      : "bg-white border border-gray-200 hover:shadow-xl"
+                      ? "bg-ocean-600 text-white shadow-xl lg:scale-105"
+                      : "bg-white border border-gray-200 hover:shadow-lg"
                   }`}
                 >
                   {service.popular && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-warm-400 text-warm-900 text-xs font-bold px-4 py-1 rounded-full shadow-lg">
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-warm-400 text-warm-900 text-xs font-bold px-4 py-1 rounded-full">
                       Most Popular
                     </div>
                   )}
 
                   <div
                     className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-5 ${
-                      service.popular
-                        ? "bg-white/20"
-                        : `bg-gradient-to-br ${service.color} shadow-md`
+                      service.popular ? "bg-white/20" : service.bg
                     }`}
                   >
                     <service.icon className="h-6 w-6 text-white" />
@@ -542,10 +477,10 @@ export default function HomePage() {
 
                   <Link
                     href="/booking"
-                    className={`mt-6 block text-center w-full px-5 py-3 rounded-xl font-semibold text-sm transition-all duration-300 hover:-translate-y-0.5 ${
+                    className={`mt-6 block text-center w-full px-5 py-3 rounded-xl font-semibold text-sm transition-colors duration-200 ${
                       service.popular
-                        ? "bg-white text-ocean-700 hover:bg-ocean-50 shadow-lg"
-                        : "bg-gradient-to-r from-brand-600 to-brand-500 text-white shadow-md shadow-brand-500/20 hover:shadow-lg"
+                        ? "bg-white text-ocean-700 hover:bg-ocean-50"
+                        : "bg-brand-600 text-white hover:bg-brand-700"
                     }`}
                   >
                     Get a Quote
@@ -555,9 +490,8 @@ export default function HomePage() {
             </div>
 
             {/* Recurring banner */}
-            <div className="mt-14 rounded-3xl bg-gradient-to-r from-brand-700 via-brand-600 to-ocean-600 p-8 md:p-12 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-              <div className="relative flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="mt-14 rounded-3xl bg-brand-700 p-8 md:p-12">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                 <div>
                   <h3 className="text-2xl font-bold text-white font-display">
                     Save Up to 20% with a Maintenance Contract
@@ -569,10 +503,10 @@ export default function HomePage() {
                 </div>
                 <Link
                   href="/booking"
-                  className="group shrink-0 inline-flex items-center gap-2 bg-white text-brand-700 font-bold px-7 py-3.5 rounded-2xl shadow-xl hover:-translate-y-1 transition-all duration-300"
+                  className="group shrink-0 inline-flex items-center gap-2 bg-white text-brand-700 font-bold px-7 py-3.5 rounded-2xl hover:bg-gray-50 transition-colors duration-200"
                 >
                   Start a Plan
-                  <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="h-5 w-5 group-hover:translate-x-0.5 transition-transform" />
                 </Link>
               </div>
             </div>
@@ -584,7 +518,7 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="section-heading">
-                Why Businesses <span className="gradient-text">Choose Us</span>
+                Why Businesses <span className="text-brand-600">Choose Us</span>
               </h2>
               <p className="section-subheading">
                 We understand what commercial spaces demand.
@@ -649,23 +583,12 @@ export default function HomePage() {
         <FAQSection />
 
         {/* ── CTA ── */}
-        <section className="py-24 bg-gradient-to-br from-brand-900 via-brand-800 to-ocean-900 relative overflow-hidden">
-          <div
-            className="absolute inset-0 opacity-[0.06]"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
-              backgroundSize: "32px 32px",
-            }}
-          />
-          <div className="absolute top-10 left-10 w-96 h-96 bg-brand-500/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-10 right-10 w-80 h-80 bg-ocean-500/20 rounded-full blur-3xl" />
-
+        <section className="py-24 bg-gray-900">
           <div className="relative max-w-3xl mx-auto px-4 text-center">
             <h2 className="text-4xl sm:text-5xl font-extrabold text-white leading-tight font-display">
               Ready for a Cleaner Workspace?
             </h2>
-            <p className="mt-6 text-lg text-brand-100/70 max-w-xl mx-auto">
+            <p className="mt-6 text-lg text-gray-400 max-w-xl mx-auto">
               Join hundreds of Massachusetts businesses that trust Honor
               Cleaning to keep their facilities spotless. Get your custom quote
               today.
@@ -673,20 +596,20 @@ export default function HomePage() {
             <div className="mt-10 flex flex-wrap justify-center gap-4">
               <Link
                 href="/booking"
-                className="group inline-flex items-center gap-2 px-10 py-5 bg-gradient-to-r from-brand-400 to-brand-500 text-brand-950 font-bold rounded-2xl text-lg shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+                className="inline-flex items-center gap-2 px-10 py-5 bg-brand-600 text-white font-bold rounded-2xl text-lg hover:bg-brand-500 transition-colors duration-200"
               >
                 Get Your Free Quote
-                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="h-5 w-5" />
               </Link>
               <Link
                 href="tel:+15083331838"
-                className="inline-flex items-center gap-2 px-10 py-5 text-white font-semibold rounded-2xl text-lg border-2 border-white/20 hover:bg-white/10 hover:-translate-y-1 transition-all duration-300"
+                className="inline-flex items-center gap-2 px-10 py-5 text-white font-semibold rounded-2xl text-lg border-2 border-white/20 hover:bg-white/10 transition-colors duration-200"
               >
                 <Phone className="h-5 w-5" />
                 (508) 333-1838
               </Link>
             </div>
-            <p className="mt-6 text-brand-300/40 text-sm">
+            <p className="mt-6 text-gray-500 text-sm">
               No credit card required for quotes. Free cancellation up to 24
               hours before service.
             </p>

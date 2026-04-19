@@ -116,9 +116,8 @@ export default function CustomerDashboard() {
   return (
     <div className="space-y-8">
       {/* Dashboard header */}
-      <div className="rounded-3xl bg-gradient-to-r from-brand-700 via-brand-600 to-ocean-600 p-8 text-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-        <div className="relative flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="rounded-3xl bg-brand-700 p-8 text-white">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold">My Dashboard</h1>
             <p className="text-brand-100/70 mt-1">Manage your bookings, subscriptions, and account</p>
@@ -137,7 +136,7 @@ export default function CustomerDashboard() {
             count: pendingQuotes.filter(b => b.status === BookingStatus.Quoted).length,
             total: pendingQuotes.length,
             href: '#quotes',
-            color: 'from-violet-500 to-violet-600',
+            color: 'bg-violet-600',
             bg: 'bg-violet-50',
             border: 'border-violet-200',
             textColor: 'text-violet-700',
@@ -147,7 +146,7 @@ export default function CustomerDashboard() {
             label: 'Upcoming Cleans',
             count: upcoming.length,
             href: '#upcoming',
-            color: 'from-brand-500 to-brand-600',
+            color: 'bg-brand-600',
             bg: 'bg-brand-50',
             border: 'border-brand-200',
             textColor: 'text-brand-700',
@@ -157,7 +156,7 @@ export default function CustomerDashboard() {
             label: 'Unpaid Invoices',
             count: invoices.filter(i => i.status === InvoiceStatus.Sent).length,
             href: '/dashboard/invoices',
-            color: 'from-warm-500 to-warm-600',
+            color: 'bg-warm-500',
             bg: 'bg-warm-50',
             border: 'border-warm-200',
             textColor: 'text-warm-700',
@@ -168,7 +167,7 @@ export default function CustomerDashboard() {
             label: 'Active Plans',
             count: subscriptions.filter(s => s.status === 'active').length,
             href: '#subscriptions',
-            color: 'from-ocean-500 to-ocean-600',
+            color: 'bg-ocean-600',
             bg: 'bg-ocean-50',
             border: 'border-ocean-200',
             textColor: 'text-ocean-700',
@@ -178,11 +177,11 @@ export default function CustomerDashboard() {
           const Inner = (
             <div className={`rounded-2xl ${stat.bg} border ${stat.border} p-4 transition-all duration-200 hover:shadow-md`}>
               <div className="flex items-center justify-between mb-2">
-                <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center`}>
+                <div className={`w-9 h-9 rounded-xl ${stat.color} flex items-center justify-center`}>
                   <stat.icon className="h-4 w-4 text-white" />
                 </div>
                 {stat.count > 0 && (
-                  <span className={`w-6 h-6 rounded-full bg-gradient-to-br ${stat.color} text-white text-xs font-bold flex items-center justify-center`}>
+                  <span className={`w-6 h-6 rounded-full ${stat.color} text-white text-xs font-bold flex items-center justify-center`}>
                     {stat.count}
                   </span>
                 )}
@@ -206,7 +205,7 @@ export default function CustomerDashboard() {
           className="card flex items-center justify-between group hover:shadow-md transition-shadow"
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center">
               <CreditCard className="h-5 w-5 text-white" />
             </div>
             <div>
@@ -225,7 +224,7 @@ export default function CustomerDashboard() {
           className="card flex items-center justify-between group hover:shadow-md transition-shadow"
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-ocean-500 to-ocean-600 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-ocean-600 flex items-center justify-center">
               <ClipboardList className="h-5 w-5 text-white" />
             </div>
             <div>
@@ -240,7 +239,7 @@ export default function CustomerDashboard() {
           className="card flex items-center justify-between group hover:shadow-md transition-shadow"
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-green-600 flex items-center justify-center">
               <CheckCircle className="h-5 w-5 text-white" />
             </div>
             <div>
@@ -256,7 +255,7 @@ export default function CustomerDashboard() {
       {pendingQuotes.length > 0 && (
         <section id="quotes">
           <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-violet-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-violet-600 flex items-center justify-center">
               <CircleDollarSign className="h-4 w-4 text-white" />
             </div>
             Pending Quotes
@@ -336,7 +335,7 @@ export default function CustomerDashboard() {
       {/* Upcoming Bookings */}
       <section id="upcoming">
         <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center">
             <Calendar className="h-4 w-4 text-white" />
           </div>
           Upcoming Bookings
@@ -394,7 +393,7 @@ export default function CustomerDashboard() {
       {subscriptions.length > 0 && (
         <section id="subscriptions">
           <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-ocean-500 to-ocean-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-ocean-600 flex items-center justify-center">
               <RefreshCw className="h-4 w-4 text-white" />
             </div>
             Active Subscriptions
@@ -428,7 +427,7 @@ export default function CustomerDashboard() {
       {/* Past Bookings & Invoices */}
       <section>
         <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-warm-500 to-warm-600 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-warm-600 flex items-center justify-center">
             <FileText className="h-4 w-4 text-white" />
           </div>
           Past Bookings

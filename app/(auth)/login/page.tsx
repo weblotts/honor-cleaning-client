@@ -89,17 +89,12 @@ function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-brand-950 via-brand-900 to-ocean-950 relative overflow-hidden px-4 py-12">
-      {/* Background decorations */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-500/15 rounded-full blur-[120px]" />
-      <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-ocean-500/10 rounded-full blur-[100px]" />
-      <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '32px 32px' }} />
-
-      <div className="relative w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-brand-950 px-4 py-12">
+      <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-3 group">
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center shadow-lg shadow-brand-500/25 group-hover:shadow-brand-500/40 transition-shadow">
+          <Link href="/" className="inline-flex items-center gap-3">
+            <div className="w-11 h-11 rounded-2xl bg-brand-600 flex items-center justify-center">
               <Sparkles className="h-6 w-6 text-white" />
             </div>
             <span className="text-2xl font-bold text-white tracking-tight">Honor Cleaning</span>

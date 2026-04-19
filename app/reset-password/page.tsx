@@ -125,11 +125,8 @@ function ResetPasswordForm() {
   return (
     <div className="min-h-screen flex">
       {/* Left decorative panel */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-brand-900 via-brand-800 to-ocean-900 relative overflow-hidden items-center justify-center p-12">
-        <div className="absolute top-20 right-10 w-72 h-72 bg-brand-500/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 left-10 w-96 h-96 bg-ocean-500/10 rounded-full blur-3xl" />
-        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '32px 32px' }} />
-        <div className="relative text-center max-w-md">
+      <div className="hidden lg:flex lg:w-1/2 bg-brand-900 relative overflow-hidden items-center justify-center p-12">
+        <div className="text-center max-w-md">
           <div className="w-20 h-20 mx-auto rounded-3xl bg-white/10 backdrop-blur-sm flex items-center justify-center mb-8 border border-white/10">
             <KeyRound className="h-10 w-10 text-brand-300" />
           </div>
@@ -145,7 +142,7 @@ function ResetPasswordForm() {
         <div className="w-full max-w-md">
           <div className="text-center mb-8 lg:hidden">
             <Link href="/" className="inline-flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center">
+              <div className="w-9 h-9 rounded-xl bg-brand-600 flex items-center justify-center">
                 <Sparkles className="h-5 w-5 text-white" />
               </div>
               <span className="text-2xl font-bold text-gray-900 font-display">Honor Cleaning</span>

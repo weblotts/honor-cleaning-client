@@ -71,9 +71,9 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
         aria-expanded={open}
       >
         <span
-          className={`shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold transition-all duration-300 ${
+          className={`shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold transition-colors duration-200 ${
             open
-              ? 'bg-gradient-to-br from-brand-500 to-brand-600 text-white shadow-md shadow-brand-500/25'
+              ? 'bg-brand-600 text-white'
               : 'bg-gray-100 text-gray-400 group-hover:bg-brand-50 group-hover:text-brand-600'
           }`}
         >
@@ -107,10 +107,7 @@ export default function FAQSection() {
     : faqs.filter((faq) => faq.category === activeCategory);
 
   return (
-    <section className="py-28 bg-gradient-to-b from-gray-50 via-white to-gray-50 relative overflow-hidden">
-      {/* Decorative background */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-brand-500/[0.02] rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-ocean-500/[0.03] rounded-full blur-3xl pointer-events-none" />
+    <section className="py-28 bg-white relative overflow-hidden">
 
       <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
@@ -134,9 +131,9 @@ export default function FAQSection() {
             <button
               key={cat.key}
               onClick={() => setActiveCategory(cat.key)}
-              className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+              className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-colors duration-200 ${
                 activeCategory === cat.key
-                  ? 'bg-gradient-to-r from-brand-600 to-brand-500 text-white shadow-md shadow-brand-500/25'
+                  ? 'bg-brand-600 text-white'
                   : 'bg-white text-gray-600 hover:text-brand-700 hover:bg-brand-50 ring-1 ring-gray-200 hover:ring-brand-200'
               }`}
             >
@@ -153,11 +150,8 @@ export default function FAQSection() {
         </div>
 
         {/* Contact CTA card */}
-        <div className="mt-14 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-3xl p-8 md:p-10 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(34,197,94,0.1),transparent_60%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(59,130,246,0.08),transparent_60%)]" />
-
-          <div className="relative flex flex-col md:flex-row items-center gap-8">
+        <div className="mt-14 bg-gray-900 rounded-3xl p-8 md:p-10">
+          <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="flex-1 text-center md:text-left">
               <div className="inline-flex items-center gap-2 bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-medium px-3 py-1.5 rounded-full mb-4">
                 <Sparkles className="h-3 w-3" />

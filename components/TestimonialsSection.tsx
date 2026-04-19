@@ -8,16 +8,16 @@ import { type Testimonial } from '@/types';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
 
 const SERVICE_COLORS: Record<string, string> = {
-  office: 'from-brand-500 to-brand-600',
-  retail: 'from-warm-500 to-warm-600',
-  medical: 'from-ocean-500 to-ocean-600',
-  industrial: 'from-gray-600 to-gray-700',
-  postConstruction: 'from-amber-500 to-amber-600',
-  standard: 'from-brand-500 to-brand-600',
-  deep: 'from-ocean-500 to-ocean-600',
-  moveIn: 'from-warm-500 to-warm-600',
-  moveOut: 'from-warm-500 to-warm-600',
-  recurring: 'from-brand-400 to-brand-500',
+  office: 'bg-brand-600',
+  retail: 'bg-warm-500',
+  medical: 'bg-ocean-600',
+  industrial: 'bg-gray-600',
+  postConstruction: 'bg-amber-500',
+  standard: 'bg-brand-600',
+  deep: 'bg-ocean-600',
+  moveIn: 'bg-warm-500',
+  moveOut: 'bg-warm-500',
+  recurring: 'bg-brand-500',
 };
 
 const fallbackTestimonials: Testimonial[] = [
@@ -73,7 +73,7 @@ export default function TestimonialsSection() {
   }, []);
 
   return (
-    <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
+    <section className="py-24 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
           <h2 className="section-heading">
@@ -87,11 +87,11 @@ export default function TestimonialsSection() {
 
         <div className="grid md:grid-cols-3 gap-6">
           {testimonials.slice(0, 6).map((t) => {
-            const color = SERVICE_COLORS[t.serviceType] || 'from-brand-500 to-brand-600';
+            const color = SERVICE_COLORS[t.serviceType] || 'bg-brand-600';
             return (
               <div
                 key={t._id}
-                className="group rounded-3xl bg-white border border-gray-100 p-7 hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300 flex flex-col"
+                className="group rounded-3xl bg-white border border-gray-100 p-7 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 flex flex-col"
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex gap-0.5">
@@ -103,7 +103,7 @@ export default function TestimonialsSection() {
                     ))}
                   </div>
                   <span
-                    className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-gradient-to-r ${color} text-white capitalize`}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold ${color} text-white capitalize`}
                   >
                     {t.serviceType}
                   </span>
@@ -116,7 +116,7 @@ export default function TestimonialsSection() {
 
                 <div className="mt-5 pt-4 border-t border-gray-200 flex items-center gap-3">
                   <div
-                    className={`w-9 h-9 rounded-full bg-gradient-to-br ${color} flex items-center justify-center text-white font-bold text-xs`}
+                    className={`w-9 h-9 rounded-full ${color} flex items-center justify-center text-white font-bold text-xs`}
                   >
                     {t.customerName[0]}
                   </div>
