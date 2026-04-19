@@ -1,0 +1,45 @@
+{
+  "pages": {
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/page.js"
+    ],
+    "/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/layout.css",
+      "static/chunks/app/layout.js"
+    ],
+    "/error": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/error.js"
+    ],
+    "/booking/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/booking/page.js"
+    ],
+    "/booking/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/booking/layout.js"
+    ],
+    "/about/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/about/page.js"
+    ],
+    "/(auth)/login/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(auth)/login/page.js"
+    ],
+    "/(auth)/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(auth)/layout.js"
+    ]
+  }
+}
