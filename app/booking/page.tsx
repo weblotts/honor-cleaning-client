@@ -116,6 +116,100 @@ function CounterCard({
   );
 }
 
+/* ── Isolated text inputs — only the local component re-renders on keystroke ── */
+
+function LocalInput({
+  externalValue,
+  onCommit,
+  transform,
+  className,
+  ...props
+}: {
+  externalValue: string;
+  onCommit: (v: string) => void;
+  transform?: (v: string) => string;
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'onBlur'>) {
+  const [value, setValue] = useState(externalValue);
+
+  useEffect(() => { setValue(externalValue); }, [externalValue]);
+
+  return (
+    <input
+      {...props}
+      className={className}
+      value={value}
+      onChange={(e) => {
+        const v = transform ? transform(e.target.value) : e.target.value;
+        setValue(v);
+      }}
+      onBlur={() => onCommit(value)}
+    />
+  );
+}
+
+function LocalNumberInput({
+  externalValue,
+  onCommit,
+  className,
+  ...props
+}: {
+  externalValue: number | undefined;
+  onCommit: (v: number | undefined) => void;
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'onBlur'>) {
+  const [value, setValue] = useState(externalValue != null ? String(externalValue) : '');
+
+  useEffect(() => { setValue(externalValue != null ? String(externalValue) : ''); }, [externalValue]);
+
+  return (
+    <input
+      {...props}
+      className={className}
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      onBlur={() => {
+        const n = parseInt(value);
+        onCommit(isNaN(n) ? undefined : n);
+      }}
+    />
+  );
+}
+
+function LocalTextarea({
+  externalValue,
+  onCommit,
+  maxLength,
+  className,
+  ...props
+}: {
+  externalValue: string;
+  onCommit: (v: string) => void;
+  maxLength?: number;
+} & Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'value' | 'onChange' | 'onBlur' | 'maxLength'>) {
+  const [value, setValue] = useState(externalValue);
+
+  useEffect(() => { setValue(externalValue); }, [externalValue]);
+
+  return (
+    <>
+      <textarea
+        {...props}
+        className={className}
+        value={value}
+        maxLength={maxLength}
+        onChange={(e) => setValue(e.target.value)}
+        onBlur={() => onCommit(value)}
+      />
+      {maxLength != null && (
+        <div className="flex justify-end mt-1">
+          <span className={`text-xs ${value.length > maxLength * 0.8 ? 'text-red-500' : 'text-gray-400'}`}>
+            {value.length}/{maxLength}
+          </span>
+        </div>
+      )}
+    </>
+  );
+}
+
 /* ── Quick-size presets per facility type ── */
 const SIZE_PRESETS: Record<string, { label: string; desc: string; sqft: number; values: Record<string, number> }[]> = {
   office: [
@@ -792,12 +886,12 @@ export default function BookingPage() {
                             <Ruler className="h-4 w-4 text-gray-400" />
                             <span className="text-sm font-semibold text-gray-700">Square Footage</span>
                           </div>
-                          <input
+                          <LocalNumberInput
                             type="number"
                             inputMode="numeric"
                             className="input-field text-lg font-bold text-center tracking-wide"
-                            value={form.propertyDetails.squareFootage ?? ''}
-                            onChange={(e) => setForm({ ...form, propertyDetails: { ...form.propertyDetails, squareFootage: e.target.value ? parseInt(e.target.value) : undefined } })}
+                            externalValue={form.propertyDetails.squareFootage}
+                            onCommit={(v) => setForm({ ...form, propertyDetails: { ...form.propertyDetails, squareFootage: v } })}
                             placeholder="Enter sq ft"
                             min={100}
                             max={200000}
@@ -1099,12 +1193,12 @@ export default function BookingPage() {
                             <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
                               <Navigation className="h-4 w-4 text-gray-400" />
                             </div>
-                            <input
+                            <LocalInput
                               type="text"
                               required
                               className="input-field pl-11"
-                              value={form.address.street}
-                              onChange={(e) => setForm({ ...form, address: { ...form.address, street: e.target.value } })}
+                              externalValue={form.address.street}
+                              onCommit={(v) => setForm({ ...form, address: { ...form.address, street: v } })}
                               placeholder="123 Main Street, Suite 400"
                             />
                           </div>
@@ -1117,12 +1211,12 @@ export default function BookingPage() {
                                 <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
                                   <Building2 className="h-4 w-4 text-gray-400" />
                                 </div>
-                                <input
+                                <LocalInput
                                   type="text"
                                   required
                                   className="input-field pl-11"
-                                  value={form.address.city}
-                                  onChange={(e) => setForm({ ...form, address: { ...form.address, city: e.target.value } })}
+                                  externalValue={form.address.city}
+                                  onCommit={(v) => setForm({ ...form, address: { ...form.address, city: v } })}
                                   placeholder="Boston"
                                 />
                               </div>
@@ -1130,16 +1224,14 @@ export default function BookingPage() {
                           </div>
                           <div className="sm:col-span-2">
                             <FormGroup label="Zip Code">
-                              <input
+                              <LocalInput
                                 type="text"
                                 required
                                 inputMode="numeric"
                                 className="input-field text-center tracking-wider font-mono"
-                                value={form.address.zip}
-                                onChange={(e) => {
-                                  const val = e.target.value.replace(/\D/g, '').slice(0, 5);
-                                  setForm({ ...form, address: { ...form.address, zip: val } });
-                                }}
+                                externalValue={form.address.zip}
+                                onCommit={(v) => setForm({ ...form, address: { ...form.address, zip: v } })}
+                                transform={(v) => v.replace(/\D/g, '').slice(0, 5)}
                                 placeholder="02101"
                                 maxLength={5}
                               />
@@ -1158,18 +1250,14 @@ export default function BookingPage() {
                         </div>
 
                         <FormGroup label="Special Instructions" icon={FileText} optional>
-                          <textarea
+                          <LocalTextarea
                             className="input-field min-h-[80px]"
                             rows={2}
-                            value={form.notes}
-                            onChange={(e) => setForm({ ...form, notes: e.target.value })}
+                            externalValue={form.notes}
+                            onCommit={(v) => setForm({ ...form, notes: v })}
                             placeholder="Access codes, parking info, areas to focus on..."
+                            maxLength={500}
                           />
-                          <div className="flex justify-end mt-1">
-                            <span className={`text-xs ${form.notes.length > 400 ? 'text-red-500' : 'text-gray-400'}`}>
-                              {form.notes.length}/500
-                            </span>
-                          </div>
                         </FormGroup>
                       </div>
                     </div>

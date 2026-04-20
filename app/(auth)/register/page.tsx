@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useMemo, Suspense } from 'react';
+import { useState, Suspense } from 'react';
+import { useForm, useWatch, FormProvider, Controller } from 'react-hook-form';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
@@ -15,6 +16,15 @@ interface FieldErrors {
   [key: string]: string;
 }
 
+type RegisterFields = {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  phone: string;
+  marketingConsent: boolean;
+};
+
 function parseApiError(err: any): { message: string; fieldErrors: FieldErrors } {
   const data = err?.response?.data;
   if (!data) return { message: 'Something went wrong. Please try again.', fieldErrors: {} };
@@ -25,25 +35,22 @@ function parseApiError(err: any): { message: string; fieldErrors: FieldErrors } 
     for (const detail of data.details) {
       fieldErrors[detail.field] = detail.message;
     }
-    return {
-      message: 'Please fix the errors below.',
-      fieldErrors,
-    };
+    return { message: 'Please fix the errors below.', fieldErrors };
   }
 
   return { message: data.error || 'Registration failed. Please try again.', fieldErrors: {} };
 }
 
-function PasswordChecklist({ password }: { password: string }) {
-  const rules = useMemo(
-    () => [
-      { label: 'At least 8 characters', met: password.length >= 8 },
-      { label: 'One uppercase letter', met: /[A-Z]/.test(password) },
-      { label: 'One lowercase letter', met: /[a-z]/.test(password) },
-      { label: 'One number', met: /\d/.test(password) },
-    ],
-    [password],
-  );
+// Only this component re-renders when the password field changes
+function PasswordChecklist() {
+  const password = (useWatch<RegisterFields, 'password'>({ name: 'password' }) ?? '') as string;
+
+  const rules = [
+    { label: 'At least 8 characters', met: password.length >= 8 },
+    { label: 'One uppercase letter', met: /[A-Z]/.test(password) },
+    { label: 'One lowercase letter', met: /[a-z]/.test(password) },
+    { label: 'One number', met: /\d/.test(password) },
+  ];
 
   if (!password) return null;
 
@@ -85,90 +92,47 @@ function RegisterForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('redirect');
-  const { register } = useAuth();
-  const [form, setForm] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    phone: '',
-    marketingConsent: false,
-  });
+  const { register: registerUser } = useAuth();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [formError, setFormError] = useState('');
 
-  const clearFieldError = (field: string) => {
-    if (fieldErrors[field]) {
-      setFieldErrors((prev) => {
-        const next = { ...prev };
-        delete next[field];
-        return next;
-      });
+  const methods = useForm<RegisterFields>({
+    defaultValues: { name: '', email: '', password: '', confirmPassword: '', phone: '', marketingConsent: false },
+  });
+  const { register, handleSubmit, control, setError, getValues, formState: { errors } } = methods;
+
+  const redirectAfterRegister = (role?: string) => {
+    if (redirectTo) { router.push(redirectTo); return; }
+    switch (role) {
+      case UserRole.Admin: router.push('/admin'); break;
+      case UserRole.Staff: router.push('/staff'); break;
+      default: router.push('/dashboard');
     }
-    if (formError) setFormError('');
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setFieldErrors({});
+  const onSubmit = handleSubmit(async ({ name, email, password, phone, marketingConsent }) => {
     setFormError('');
-
-    const errors: FieldErrors = {};
-
-    if (form.name.trim().length < 2) {
-      errors.name = 'Name must be at least 2 characters';
-    }
-
-    if (!form.email.includes('@')) {
-      errors.email = 'Please enter a valid email address';
-    }
-
-    if (form.password.length < 8) {
-      errors.password = 'Password must be at least 8 characters';
-    } else if (!/[A-Z]/.test(form.password)) {
-      errors.password = 'Password must contain an uppercase letter';
-    } else if (!/[a-z]/.test(form.password)) {
-      errors.password = 'Password must contain a lowercase letter';
-    } else if (!/\d/.test(form.password)) {
-      errors.password = 'Password must contain a number';
-    }
-
-    if (form.password !== form.confirmPassword) {
-      errors.confirmPassword = 'Passwords do not match';
-    }
-
-    if (Object.keys(errors).length > 0) {
-      setFieldErrors(errors);
-      setFormError('Please fix the errors below.');
-      return;
-    }
-
     setLoading(true);
     try {
-      await register({
-        name: form.name,
-        email: form.email,
-        password: form.password,
-        phone: form.phone || undefined,
-        marketingConsent: form.marketingConsent,
-      });
+      await registerUser({ name: name.trim(), email, password, phone: phone || undefined, marketingConsent });
       toast.success('Account created successfully!');
       router.push(redirectTo || '/dashboard');
     } catch (err: any) {
       const { message, fieldErrors: serverErrors } = parseApiError(err);
-      setFieldErrors(serverErrors);
+      Object.entries(serverErrors).forEach(([field, msg]) => {
+        setError(field as keyof RegisterFields, { type: 'server', message: msg });
+      });
       setFormError(message);
       toast.error(message);
     } finally {
       setLoading(false);
     }
-  };
+  });
 
-  const inputClass = (field: string) =>
-    `input-field ${fieldErrors[field] ? 'border-red-400 ring-1 ring-red-400 focus:border-red-500 focus:ring-red-500' : ''}`;
+  const inputClass = (field: keyof RegisterFields) =>
+    `input-field ${errors[field] ? 'border-red-400 ring-1 ring-red-400 focus:border-red-500 focus:ring-red-500' : ''}`;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-brand-950 px-4 py-12">
@@ -197,174 +161,167 @@ function RegisterForm() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-            {/* Row 1: Name & Email */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Full Name</label>
-                <div className="relative">
-                  <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <User className="h-4 w-4 text-gray-400" />
+          <FormProvider {...methods}>
+            <form onSubmit={onSubmit} className="space-y-4" noValidate>
+              {/* Row 1: Name & Email */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Full Name</label>
+                  <div className="relative">
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                      <User className="h-4 w-4 text-gray-400" />
+                    </div>
+                    <input
+                      type="text"
+                      className={`${inputClass('name')} pl-11`}
+                      placeholder="John Doe"
+                      {...register('name', {
+                        required: 'Name is required',
+                        minLength: { value: 2, message: 'Name must be at least 2 characters' },
+                      })}
+                    />
                   </div>
-                  <input
-                    type="text"
-                    required
-                    className={`${inputClass('name')} pl-11`}
-                    value={form.name}
-                    placeholder="John Doe"
-                    onChange={(e) => {
-                      setForm({ ...form, name: e.target.value });
-                      clearFieldError('name');
-                    }}
-                  />
+                  <FieldError message={errors.name?.message} />
                 </div>
-                <FieldError message={fieldErrors.name} />
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
+                  <div className="relative">
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                      <Mail className="h-4 w-4 text-gray-400" />
+                    </div>
+                    <input
+                      type="email"
+                      className={`${inputClass('email')} pl-11`}
+                      placeholder="john@example.com"
+                      {...register('email', {
+                        required: 'Email is required',
+                        validate: (v) => v.includes('@') || 'Please enter a valid email address',
+                      })}
+                    />
+                  </div>
+                  <FieldError message={errors.email?.message} />
+                </div>
               </div>
 
+              {/* Phone — full width */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
-                <div className="relative">
-                  <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <Mail className="h-4 w-4 text-gray-400" />
-                  </div>
-                  <input
-                    type="email"
-                    required
-                    className={`${inputClass('email')} pl-11`}
-                    value={form.email}
-                    placeholder="john@example.com"
-                    onChange={(e) => {
-                      setForm({ ...form, email: e.target.value });
-                      clearFieldError('email');
-                    }}
-                  />
-                </div>
-                <FieldError message={fieldErrors.email} />
+                <label className="flex items-center gap-1 text-sm font-medium text-gray-700 mb-1.5">
+                  Phone <span className="text-gray-400 text-xs font-normal">(optional)</span>
+                </label>
+                <Controller
+                  name="phone"
+                  control={control}
+                  render={({ field }) => (
+                    <PhoneInput
+                      value={field.value}
+                      onChange={field.onChange}
+                      error={!!errors.phone}
+                    />
+                  )}
+                />
+                <FieldError message={errors.phone?.message} />
               </div>
-            </div>
 
-            {/* Phone — full width */}
-            <div>
-              <label className="flex items-center gap-1 text-sm font-medium text-gray-700 mb-1.5">
-                Phone <span className="text-gray-400 text-xs font-normal">(optional)</span>
+              {/* Row 2: Password & Confirm Password */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      className={`${inputClass('password')} pr-10`}
+                      {...register('password', {
+                        required: 'Password is required',
+                        validate: {
+                          minLen: (v) => v.length >= 8 || 'At least 8 characters',
+                          upper: (v) => /[A-Z]/.test(v) || 'One uppercase letter required',
+                          lower: (v) => /[a-z]/.test(v) || 'One lowercase letter required',
+                          digit: (v) => /\d/.test(v) || 'One number required',
+                        },
+                      })}
+                    />
+                    <button
+                      type="button"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      onClick={() => setShowPassword(!showPassword)}
+                      tabIndex={-1}
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  </div>
+                  <FieldError message={errors.password?.message} />
+                  {/* Isolated: only re-renders this component on password change */}
+                  <PasswordChecklist />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                  <div className="relative">
+                    <input
+                      type={showConfirm ? 'text' : 'password'}
+                      className={`${inputClass('confirmPassword')} pr-10`}
+                      {...register('confirmPassword', {
+                        required: 'Please confirm your password',
+                        validate: (v, formValues) => v === formValues.password || 'Passwords do not match',
+                      })}
+                    />
+                    <button
+                      type="button"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      onClick={() => setShowConfirm(!showConfirm)}
+                      tabIndex={-1}
+                    >
+                      {showConfirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  </div>
+                  <FieldError message={errors.confirmPassword?.message} />
+                </div>
+              </div>
+
+              <label className="flex items-start gap-2 text-sm text-gray-600">
+                <input
+                  type="checkbox"
+                  className="mt-1"
+                  {...register('marketingConsent')}
+                />
+                <span>
+                  I agree to receive promotional emails and SMS from Honor Cleaning. You can
+                  unsubscribe at any time.
+                </span>
               </label>
-              <PhoneInput
-                value={form.phone}
-                onChange={(raw) => {
-                  setForm({ ...form, phone: raw });
-                  clearFieldError('phone');
-                }}
-                error={!!fieldErrors.phone}
-              />
-              <FieldError message={fieldErrors.phone} />
-            </div>
 
-            {/* Row 2: Password & Confirm Password */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    required
-                    className={`${inputClass('password')} pr-10`}
-                    value={form.password}
-                    onChange={(e) => {
-                      setForm({ ...form, password: e.target.value });
-                      clearFieldError('password');
-                    }}
-                  />
-                  <button
-                    type="button"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                    onClick={() => setShowPassword(!showPassword)}
-                    tabIndex={-1}
-                  >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </button>
-                </div>
-                <FieldError message={fieldErrors.password} />
-                <PasswordChecklist password={form.password} />
+              <button type="submit" disabled={loading} className="btn-primary w-full text-base py-3.5 mt-2">
+                {loading ? 'Creating account...' : 'Create Account'}
+              </button>
+
+              <div className="flex items-center gap-3">
+                <div className="flex-1 h-px bg-gray-200" />
+                <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">or</span>
+                <div className="flex-1 h-px bg-gray-200" />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
-                <div className="relative">
-                  <input
-                    type={showConfirm ? 'text' : 'password'}
-                    required
-                    className={`${inputClass('confirmPassword')} pr-10`}
-                    value={form.confirmPassword}
-                    onChange={(e) => {
-                      setForm({ ...form, confirmPassword: e.target.value });
-                      clearFieldError('confirmPassword');
-                    }}
-                  />
-                  <button
-                    type="button"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                    onClick={() => setShowConfirm(!showConfirm)}
-                    tabIndex={-1}
-                  >
-                    {showConfirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </button>
-                </div>
-                <FieldError message={fieldErrors.confirmPassword} />
-              </div>
-            </div>
-
-            <label className="flex items-start gap-2 text-sm text-gray-600">
-              <input
-                type="checkbox"
-                className="mt-1"
-                checked={form.marketingConsent}
-                onChange={(e) => setForm({ ...form, marketingConsent: e.target.checked })}
-              />
-              <span>
-                I agree to receive promotional emails and SMS from Honor Cleaning. You can
-                unsubscribe at any time.
-              </span>
-            </label>
-
-            <button type="submit" disabled={loading} className="btn-primary w-full text-base py-3.5 mt-2">
-              {loading ? 'Creating account...' : 'Create Account'}
-            </button>
-
-            <div className="flex items-center gap-3">
-              <div className="flex-1 h-px bg-gray-200" />
-              <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">or</span>
-              <div className="flex-1 h-px bg-gray-200" />
-            </div>
-
-            <GoogleSignInButton
-              text="signup_with"
-              onSuccess={async (credential) => {
-                setFormError('');
-                setLoading(true);
-                try {
-                  const result = await useAuthStore.getState().googleLogin(credential);
-                  toast.success('Account created with Google!');
-                  if (redirectTo) {
-                    router.push(redirectTo);
-                  } else {
-                    const role = result.role || useAuthStore.getState().user?.role;
-                    switch (role) {
-                      case UserRole.Admin: router.push('/admin'); break;
-                      case UserRole.Staff: router.push('/staff'); break;
-                      default: router.push('/dashboard');
-                    }
+              <GoogleSignInButton
+                text="signup_with"
+                onSuccess={async (credential) => {
+                  setFormError('');
+                  setLoading(true);
+                  try {
+                    const result = await useAuthStore.getState().googleLogin(credential);
+                    toast.success('Account created with Google!');
+                    redirectAfterRegister(result.role || useAuthStore.getState().user?.role);
+                  } catch (err: any) {
+                    const msg = err.response?.data?.error || 'Google sign-up failed';
+                    setFormError(msg);
+                    toast.error(msg);
+                  } finally {
+                    setLoading(false);
                   }
-                } catch (err: any) {
-                  const msg = err.response?.data?.error || 'Google sign-up failed';
-                  setFormError(msg);
-                  toast.error(msg);
-                } finally {
-                  setLoading(false);
-                }
-              }}
-              onError={() => toast.error('Google sign-up was cancelled')}
-            />
-          </form>
+                }}
+                onError={() => toast.error('Google sign-up was cancelled')}
+              />
+            </form>
+          </FormProvider>
 
           <p className="mt-6 text-center text-xs text-gray-400">
             By signing up, you agree to our{' '}

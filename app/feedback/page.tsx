@@ -1,11 +1,18 @@
 'use client';
 
 import { Suspense, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useSearchParams } from 'next/navigation';
 import { Star, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import axios from 'axios';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+
+type FeedbackFields = {
+  comment: string;
+  customerRole: string;
+  customerLocation: string;
+};
 
 function FeedbackForm() {
   const searchParams = useSearchParams();
@@ -24,9 +31,10 @@ function FeedbackForm() {
 
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
-  const [comment, setComment] = useState('');
-  const [customerRole, setCustomerRole] = useState('');
-  const [customerLocation, setCustomerLocation] = useState('');
+
+  const { register, handleSubmit, setValue } = useForm<FeedbackFields>({
+    defaultValues: { comment: '', customerRole: '', customerLocation: '' },
+  });
 
   useEffect(() => {
     if (!token) {
@@ -39,25 +47,18 @@ function FeedbackForm() {
       .get(`${API_URL}/feedback/token/${token}`)
       .then((res) => {
         setFeedbackData(res.data);
-        if (res.data.customerLocation) setCustomerLocation(res.data.customerLocation);
+        if (res.data.customerLocation) setValue('customerLocation', res.data.customerLocation);
       })
       .catch((err) => {
         const msg = err.response?.data?.error || 'Failed to load feedback form';
         setError(msg);
       })
       .finally(() => setLoading(false));
-  }, [token]);
+  }, [token, setValue]);
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (rating === 0) {
-      setError('Please select a rating');
-      return;
-    }
-    if (comment.trim().length < 5) {
-      setError('Please write at least a few words about your experience');
-      return;
-    }
+  const onSubmit = handleSubmit(async ({ comment, customerRole, customerLocation }) => {
+    if (rating === 0) { setError('Please select a rating'); return; }
+    if (comment.trim().length < 5) { setError('Please write at least a few words about your experience'); return; }
 
     setSubmitting(true);
     setError('');
@@ -80,7 +81,7 @@ function FeedbackForm() {
     } finally {
       setSubmitting(false);
     }
-  }
+  });
 
   if (loading) {
     return (
@@ -140,8 +141,8 @@ function FeedbackForm() {
             cleaning service
           </p>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Star Rating */}
+          <form onSubmit={onSubmit} className="space-y-5">
+            {/* Star Rating — stays as local state since it's not a text input */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Rating</label>
               <div className="flex gap-1">
@@ -174,11 +175,10 @@ function FeedbackForm() {
               <textarea
                 id="comment"
                 rows={4}
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
                 placeholder="What did you like? How can we improve?"
                 className="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none resize-none"
                 maxLength={2000}
+                {...register('comment', { required: true })}
               />
             </div>
 
@@ -191,10 +191,9 @@ function FeedbackForm() {
               <input
                 id="role"
                 type="text"
-                value={customerRole}
-                onChange={(e) => setCustomerRole(e.target.value)}
                 placeholder="e.g. Office Manager, TechFlow Inc."
                 className="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                {...register('customerRole')}
               />
             </div>
 
@@ -207,10 +206,9 @@ function FeedbackForm() {
               <input
                 id="location"
                 type="text"
-                value={customerLocation}
-                onChange={(e) => setCustomerLocation(e.target.value)}
                 placeholder="e.g. Cambridge, MA"
                 className="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                {...register('customerLocation')}
               />
             </div>
 

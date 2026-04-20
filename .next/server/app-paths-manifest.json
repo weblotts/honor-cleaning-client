@@ -3,6 +3,5 @@
   "/admin/page": "app/admin/page.js",
   "/admin/jobs/page": "app/admin/jobs/page.js",
   "/admin/quotations/page": "app/admin/quotations/page.js",
-  "/admin/invoices/page": "app/admin/invoices/page.js",
-  "/booking/page": "app/booking/page.js"
+  "/admin/invoices/page": "app/admin/invoices/page.js"
 }

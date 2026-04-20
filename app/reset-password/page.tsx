@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, Suspense } from 'react';
+import { useForm, useWatch, FormProvider } from 'react-hook-form';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import api from '@/lib/api';
@@ -15,7 +16,12 @@ export default function ResetPasswordPage() {
   );
 }
 
-function PasswordChecklist({ password }: { password: string }) {
+type ResetFields = { password: string; confirmPassword: string };
+
+// Isolated: only re-renders when password field changes
+function PasswordChecklist() {
+  const password = useWatch<ResetFields>({ name: 'password' }) ?? '';
+
   const rules = [
     { label: 'At least 8 characters', met: password.length >= 8 },
     { label: 'One uppercase letter', met: /[A-Z]/.test(password) },
@@ -46,34 +52,17 @@ function ResetPasswordForm() {
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
 
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
 
-  const isValid =
-    password.length >= 8 &&
-    /[A-Z]/.test(password) &&
-    /[a-z]/.test(password) &&
-    /\d/.test(password) &&
-    password === confirmPassword;
+  const methods = useForm<ResetFields>();
+  const { register, handleSubmit, formState: { errors } } = methods;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = handleSubmit(async ({ password }) => {
     setError('');
-
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      return;
-    }
-
-    if (!token) {
-      setError('Invalid reset link. Please request a new one.');
-      return;
-    }
-
+    if (!token) { setError('Invalid reset link. Please request a new one.'); return; }
     setLoading(true);
     try {
       await api.post('/auth/reset-password', { token, password });
@@ -86,7 +75,7 @@ function ResetPasswordForm() {
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   if (!token) {
     return (
@@ -160,55 +149,70 @@ function ResetPasswordForm() {
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">New Password</label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    required
-                    className="input-field pr-10"
-                    value={password}
-                    onChange={(e) => { setPassword(e.target.value); setError(''); }}
-                    placeholder="Enter new password"
-                  />
-                  <button
-                    type="button"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                    onClick={() => setShowPassword(!showPassword)}
-                    tabIndex={-1}
-                  >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </button>
+            <FormProvider {...methods}>
+              <form onSubmit={onSubmit} className="space-y-5" noValidate>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">New Password</label>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      className="input-field pr-10"
+                      placeholder="Enter new password"
+                      {...register('password', {
+                        required: 'Password is required',
+                        validate: {
+                          minLen: (v) => v.length >= 8 || 'At least 8 characters',
+                          upper: (v) => /[A-Z]/.test(v) || 'One uppercase letter required',
+                          lower: (v) => /[a-z]/.test(v) || 'One lowercase letter required',
+                          digit: (v) => /\d/.test(v) || 'One number required',
+                        },
+                      })}
+                    />
+                    <button
+                      type="button"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                      onClick={() => setShowPassword(!showPassword)}
+                      tabIndex={-1}
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  </div>
+                  {errors.password && (
+                    <p className="mt-1.5 flex items-center gap-1 text-sm text-red-600">
+                      <AlertCircle className="h-3.5 w-3.5" /> {errors.password.message}
+                    </p>
+                  )}
+                  {/* Isolated: only this component re-renders on password change */}
+                  <PasswordChecklist />
                 </div>
-                <PasswordChecklist password={password} />
-              </div>
 
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Confirm New Password</label>
-                <input
-                  type="password"
-                  required
-                  className={`input-field ${confirmPassword && password !== confirmPassword ? 'border-red-400 ring-1 ring-red-400' : ''}`}
-                  value={confirmPassword}
-                  onChange={(e) => { setConfirmPassword(e.target.value); setError(''); }}
-                  placeholder="Confirm new password"
-                />
-                {confirmPassword && password !== confirmPassword && (
-                  <p className="mt-1.5 flex items-center gap-1 text-sm text-red-600">
-                    <AlertCircle className="h-3.5 w-3.5" /> Passwords do not match
-                  </p>
-                )}
-              </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Confirm New Password</label>
+                  <input
+                    type="password"
+                    className={`input-field ${errors.confirmPassword ? 'border-red-400 ring-1 ring-red-400' : ''}`}
+                    placeholder="Confirm new password"
+                    {...register('confirmPassword', {
+                      required: 'Please confirm your password',
+                      validate: (v, formValues) => v === formValues.password || 'Passwords do not match',
+                    })}
+                  />
+                  {errors.confirmPassword && (
+                    <p className="mt-1.5 flex items-center gap-1 text-sm text-red-600">
+                      <AlertCircle className="h-3.5 w-3.5" /> {errors.confirmPassword.message}
+                    </p>
+                  )}
+                </div>
 
-              <button
-                type="submit"
-                disabled={loading || !isValid}
-                className="btn-primary w-full text-base py-3.5"
-              >
-                {loading ? 'Resetting...' : 'Reset Password'}
-              </button>
-            </form>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="btn-primary w-full text-base py-3.5"
+                >
+                  {loading ? 'Resetting...' : 'Reset Password'}
+                </button>
+              </form>
+            </FormProvider>
 
             <p className="mt-8 text-center text-sm text-gray-500">
               Remember your password?{' '}

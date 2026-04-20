@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, Suspense } from 'react';
+import { useForm } from 'react-hook-form';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
@@ -18,24 +19,33 @@ export default function LoginPage() {
   );
 }
 
+type LoginFields = { email: string; password: string };
+type MfaFields = { mfaCode: string };
+
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('redirect');
   const { login, verifyMfa } = useAuth();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formError, setFormError] = useState('');
-
-  // MFA step
   const [mfaStep, setMfaStep] = useState(false);
   const [tempToken, setTempToken] = useState('');
-  const [mfaCode, setMfaCode] = useState('');
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const { register, handleSubmit } = useForm<LoginFields>();
+  const { register: mfaRegister, handleSubmit: mfaHandleSubmit } = useForm<MfaFields>();
+
+  const redirectAfterLogin = (role?: string) => {
+    if (redirectTo) { router.push(redirectTo); return; }
+    switch (role) {
+      case UserRole.Admin: router.push('/admin'); break;
+      case UserRole.Staff: router.push('/staff'); break;
+      default: router.push('/dashboard');
+    }
+  };
+
+  const handleLogin = handleSubmit(async ({ email, password }) => {
     setFormError('');
     setLoading(true);
     try {
@@ -46,16 +56,7 @@ function LoginForm() {
         toast.success('Enter your MFA code');
       } else {
         toast.success('Welcome back!');
-        if (redirectTo) {
-          router.push(redirectTo);
-        } else {
-          const role = result.role || useAuthStore.getState().user?.role;
-          switch (role) {
-            case UserRole.Admin: router.push('/admin'); break;
-            case UserRole.Staff: router.push('/staff'); break;
-            default: router.push('/dashboard');
-          }
-        }
+        redirectAfterLogin(result.role || useAuthStore.getState().user?.role);
       }
     } catch (err: any) {
       const msg = err.response?.data?.error || 'Unable to sign in. Please check your credentials.';
@@ -64,21 +65,16 @@ function LoginForm() {
     } finally {
       setLoading(false);
     }
-  };
+  });
 
-  const handleMfa = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleMfa = mfaHandleSubmit(async ({ mfaCode }) => {
     setFormError('');
     setLoading(true);
     try {
-      await verifyMfa(tempToken, mfaCode);
+      await verifyMfa(tempToken, mfaCode.replace(/\D/g, ''));
       toast.success('MFA verified!');
-      if (redirectTo) {
-        router.push(redirectTo);
-      } else {
-        const role = useAuthStore.getState().user?.role;
-        router.push(role === UserRole.Admin ? '/admin' : '/staff');
-      }
+      const role = useAuthStore.getState().user?.role;
+      router.push(role === UserRole.Admin ? '/admin' : '/staff');
     } catch (err: any) {
       const msg = err.response?.data?.error || 'Invalid code. Please try again.';
       setFormError(msg);
@@ -86,7 +82,7 @@ function LoginForm() {
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-brand-950 px-4 py-12">
@@ -125,11 +121,9 @@ function LoginForm() {
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
                 <input
                   type="email"
-                  required
                   className="input-field"
-                  value={email}
-                  onChange={(e) => { setEmail(e.target.value); setFormError(''); }}
                   placeholder="you@example.com"
+                  {...register('email', { required: true })}
                 />
               </div>
               <div>
@@ -142,11 +136,9 @@ function LoginForm() {
                 <div className="relative">
                   <input
                     type={showPassword ? 'text' : 'password'}
-                    required
                     className="input-field pr-10"
-                    value={password}
-                    onChange={(e) => { setPassword(e.target.value); setFormError(''); }}
                     placeholder="Enter password"
+                    {...register('password', { required: true })}
                   />
                   <button
                     type="button"
@@ -181,16 +173,7 @@ function LoginForm() {
                       toast.success('Enter your MFA code');
                     } else {
                       toast.success('Welcome back!');
-                      if (redirectTo) {
-                        router.push(redirectTo);
-                      } else {
-                        const role = result.role || useAuthStore.getState().user?.role;
-                        switch (role) {
-                          case UserRole.Admin: router.push('/admin'); break;
-                          case UserRole.Staff: router.push('/staff'); break;
-                          default: router.push('/dashboard');
-                        }
-                      }
+                      redirectAfterLogin(result.role || useAuthStore.getState().user?.role);
                     }
                   } catch (err: any) {
                     const msg = err.response?.data?.error || 'Google sign-in failed';
@@ -210,13 +193,11 @@ function LoginForm() {
               </p>
               <input
                 type="text"
-                required
                 maxLength={6}
                 className="input-field text-center text-2xl tracking-[0.3em] font-mono"
-                value={mfaCode}
-                onChange={(e) => setMfaCode(e.target.value.replace(/\D/g, ''))}
                 placeholder="000000"
                 autoFocus
+                {...mfaRegister('mfaCode', { required: true })}
               />
               <button type="submit" disabled={loading} className="btn-primary w-full text-base py-3.5">
                 {loading ? 'Verifying...' : 'Verify'}

@@ -1,18 +1,20 @@
 'use client';
 
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 import api from '@/lib/api';
 import toast from 'react-hot-toast';
 import { Sparkles, Mail, ArrowLeft, CheckCircle, Send } from 'lucide-react';
 
+type ForgotFields = { email: string };
+
 export default function ForgotPasswordPage() {
-  const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { register, handleSubmit, getValues } = useForm<ForgotFields>();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = handleSubmit(async ({ email }) => {
     setLoading(true);
     try {
       await api.post('/auth/forgot-password', { email });
@@ -24,7 +26,7 @@ export default function ForgotPasswordPage() {
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-brand-950 px-4 py-12">
@@ -49,7 +51,7 @@ export default function ForgotPasswordPage() {
               </div>
               <h1 className="text-2xl font-bold text-gray-900 mb-2">Check Your Email</h1>
               <p className="text-gray-500 mb-2">
-                If an account exists for <strong className="text-gray-700">{email}</strong>, we have sent a password reset link.
+                If an account exists for <strong className="text-gray-700">{getValues('email')}</strong>, we have sent a password reset link.
               </p>
               <p className="text-gray-400 text-sm mb-8">
                 The link will expire in 1 hour. Check your spam folder if you do not see it.
@@ -60,7 +62,7 @@ export default function ForgotPasswordPage() {
                   Back to Sign In
                 </Link>
                 <button
-                  onClick={() => { setSent(false); setEmail(''); }}
+                  onClick={() => setSent(false)}
                   className="w-full text-sm text-gray-500 hover:text-brand-600 transition-colors py-2"
                 >
                   Try a different email
@@ -81,7 +83,7 @@ export default function ForgotPasswordPage() {
                 </p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+              <form onSubmit={onSubmit} className="space-y-5" noValidate>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1.5">Email Address</label>
                   <div className="relative">
@@ -90,19 +92,17 @@ export default function ForgotPasswordPage() {
                     </div>
                     <input
                       type="email"
-                      required
                       className="input-field pl-11"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
                       placeholder="you@example.com"
                       autoFocus
+                      {...register('email', { required: true })}
                     />
                   </div>
                 </div>
 
                 <button
                   type="submit"
-                  disabled={loading || !email}
+                  disabled={loading}
                   className="btn-primary w-full text-base py-3.5"
                 >
                   {loading ? (
