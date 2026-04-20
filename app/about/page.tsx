@@ -20,10 +20,32 @@ import {
   CalendarCheck,
 } from 'lucide-react';
 
-export const metadata = {
-  title: 'About Us | Honor Cleaning Co.',
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'About Us — Honor Cleaning Co.',
   description:
-    'Learn about Honor Cleaning Co. — professional commercial cleaning based in Waltham, MA. Licensed, insured, and committed to eco-friendly practices.',
+    'Learn about Honor Cleaning Co. — professional commercial cleaning based in Waltham, MA. Licensed, insured, and committed to eco-friendly practices across Greater Boston.',
+  openGraph: {
+    title: 'About Honor Cleaning Co. — Commercial Cleaning in Greater Boston',
+    description:
+      'Licensed, insured, and eco-friendly commercial cleaning company serving offices, retail, medical, and industrial spaces across 20+ Massachusetts towns.',
+    images: [
+      {
+        url: '/opengraph-image',
+        width: 1200,
+        height: 630,
+        alt: 'About Honor Cleaning — Commercial Cleaning Services in Greater Boston, MA',
+        type: 'image/png',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'About Honor Cleaning Co.',
+    description: 'Licensed, insured, eco-friendly commercial cleaning across 20+ MA towns.',
+    images: ['/opengraph-image'],
+  },
 };
 
 const values = [

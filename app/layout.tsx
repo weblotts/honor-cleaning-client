@@ -2,8 +2,10 @@ import type { Metadata } from 'next';
 import { Toaster } from 'react-hot-toast';
 import './globals.css';
 
+const BASE_URL = 'https://honorcleaning.com';
+
 export const metadata: Metadata = {
-  metadataBase: new URL('https://honorcleaning.com'),
+  metadataBase: new URL(BASE_URL),
   title: {
     default: 'Honor Cleaning — Commercial Cleaning Services in Massachusetts',
     template: '%s | Honor Cleaning',
@@ -35,6 +37,15 @@ export const metadata: Metadata = {
     email: true,
     address: true,
   },
+  icons: {
+    icon: [
+      { url: '/logo.png', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/logo.png', type: 'image/png' },
+    ],
+    shortcut: '/logo.png',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
@@ -42,12 +53,22 @@ export const metadata: Metadata = {
     title: 'Honor Cleaning — Commercial Cleaning Services in Massachusetts',
     description:
       'Boston\'s trusted commercial cleaning company. Office, retail, medical, and industrial cleaning across 20+ MA towns. Get a quote in 2 minutes.',
+    images: [
+      {
+        url: '/opengraph-image',
+        width: 1200,
+        height: 630,
+        alt: 'Honor Cleaning — Commercial Cleaning Services in Greater Boston, MA',
+        type: 'image/png',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Honor Cleaning — Commercial Cleaning Services in MA',
     description:
       'Licensed & insured commercial cleaning services across Greater Boston. Get your free quote online today.',
+    images: ['/opengraph-image'],
   },
   robots: {
     index: true,
