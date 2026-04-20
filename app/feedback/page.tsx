@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Star, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import axios from 'axios';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
 
-export default function FeedbackPage() {
+function FeedbackForm() {
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
 
@@ -240,5 +240,19 @@ export default function FeedbackPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function FeedbackPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <Loader2 className="h-8 w-8 text-emerald-600 animate-spin" />
+        </div>
+      }
+    >
+      <FeedbackForm />
+    </Suspense>
   );
 }
