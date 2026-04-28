@@ -29,6 +29,10 @@ export interface Address {
 }
 
 export enum ServiceType {
+  Standard = 'standard',
+  Deep = 'deep',
+  MoveIn = 'moveIn',
+  MoveOut = 'moveOut',
   Office = 'office',
   Retail = 'retail',
   Medical = 'medical',

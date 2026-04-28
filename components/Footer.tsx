@@ -56,7 +56,7 @@ export default function Footer() {
           <div>
             <h3 className="text-white font-bold mb-5 text-sm uppercase tracking-wider font-display">Services</h3>
             <ul className="space-y-3 text-sm">
-              {['Office Cleaning', 'Retail & Storefront', 'Medical & Clinic', 'Industrial & Warehouse', 'Recurring Contracts'].map((service) => (
+              {['Home Cleaning', 'Deep Clean', 'Move-In / Move-Out', 'Office Cleaning', 'Retail & Storefront', 'Medical & Clinic', 'Industrial & Warehouse'].map((service) => (
                 <li key={service}>
                   <Link href="/booking" className="text-gray-400 hover:text-brand-400 transition-colors duration-200 flex items-center gap-2 group">
                     <ArrowRight className="h-3 w-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />

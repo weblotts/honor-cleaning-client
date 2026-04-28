@@ -22,9 +22,58 @@ import {
   Warehouse,
   HardHat,
   Users,
+  Home,
+  SprayCan,
+  DoorOpen,
 } from "lucide-react";
 
-const services = [
+const homeServices = [
+  {
+    title: "Standard Home Clean",
+    price: "From $150",
+    description:
+      "Regular maintenance cleaning for homes and apartments. Kitchens, bathrooms, bedrooms, and living areas.",
+    features: [
+      "Kitchen surfaces & appliances",
+      "Bathroom scrub & sanitize",
+      "Vacuuming & mopping",
+      "Dusting & trash removal",
+    ],
+    icon: Home,
+    bg: "bg-emerald-600",
+  },
+  {
+    title: "Deep Clean",
+    price: "From $250",
+    description:
+      "Top-to-bottom intensive clean. Perfect for a first clean, seasonal reset, or long-overdue refresh.",
+    features: [
+      "Inside ovens & fridges",
+      "Baseboards & light fixtures",
+      "Cabinet interiors",
+      "Window sills & blinds",
+    ],
+    popular: true,
+    icon: SprayCan,
+    bg: "bg-teal-600",
+  },
+  {
+    title: "Move-In / Move-Out",
+    price: "From $300",
+    description:
+      "Spotless handover cleaning for tenants and landlords. Leave it — or find it — in perfect condition.",
+    features: [
+      "Full deep clean, every room",
+      "Inside all cabinets & closets",
+      "Appliance interiors",
+      "Walls, switches & door frames",
+    ],
+    icon: DoorOpen,
+    bg: "bg-warm-500",
+  },
+];
+
+const commercialServices = [
   {
     title: "Office Cleaning",
     price: "Custom",
@@ -83,6 +132,8 @@ const services = [
     bg: "bg-violet-500",
   },
 ];
+
+const services = commercialServices;
 
 const howItWorks = [
   {
@@ -147,8 +198,8 @@ export default function HomePage() {
                 </h1>
 
                 <p className="mt-8 text-lg sm:text-xl text-brand-100/60 max-w-xl leading-relaxed">
-                  Professional commercial cleaning for offices, retail spaces,
-                  medical facilities, and more across Greater Boston.
+                  Professional cleaning for homes, apartments, offices, retail spaces,
+                  and more across Greater Boston.
                   Background-checked staff and a satisfaction guarantee on every job.
                 </p>
 
@@ -334,8 +385,10 @@ export default function HomePage() {
             <p className="text-center text-sm text-gray-400 font-medium uppercase tracking-wider mb-8">
               Trusted by businesses across Massachusetts
             </p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center">
               {[
+                { icon: Home, label: "Homes" },
+                { icon: Building2, label: "Apartments" },
                 { icon: Briefcase, label: "Corporate Offices" },
                 { icon: Store, label: "Retail Stores" },
                 { icon: Stethoscope, label: "Medical Clinics" },
@@ -393,121 +446,163 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ── SERVICES ── */}
-        <section
-          id="services"
-          className="py-24 bg-gray-50"
-        >
+        {/* ── OUR SERVICES ── */}
+        <section id="services" className="py-24 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
+              <div className="inline-flex items-center gap-2 bg-brand-50 text-brand-700 text-xs font-semibold px-3 py-1.5 rounded-full mb-4">
+                <Sparkles className="h-3.5 w-3.5" />
+                Our Services
+              </div>
               <h2 className="section-heading">
-                Our <span className="text-brand-600">Services</span>
+                Cleaning for <span className="text-brand-600">Every Space</span>
               </h2>
               <p className="section-subheading">
-                Tailored commercial cleaning solutions for every type of
-                business. Custom quotes, no hidden fees.
+                From homes to offices — professional cleaning you can trust.
+                Eco-friendly products, background-checked cleaners, no hidden fees.
               </p>
             </div>
 
-            <div
-              id="pricing"
-              className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
-            >
-              {services.map((service) => (
-                <div
-                  key={service.title}
-                  className={`relative rounded-3xl p-7 transition-all duration-300 hover:-translate-y-1 flex flex-col ${
-                    service.popular
-                      ? "bg-ocean-600 text-white shadow-xl lg:scale-105"
-                      : "bg-white border border-gray-200 hover:shadow-lg"
-                  }`}
-                >
-                  {service.popular && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-warm-400 text-warm-900 text-xs font-bold px-4 py-1 rounded-full">
-                      Most Popular
-                    </div>
-                  )}
-
-                  <div
-                    className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-5 ${
-                      service.popular ? "bg-white/20" : service.bg
-                    }`}
-                  >
-                    <service.icon className="h-6 w-6 text-white" />
-                  </div>
-
-                  <h3
-                    className={`text-lg font-bold ${service.popular ? "text-white" : "text-gray-900"} font-display`}
-                  >
-                    {service.title}
-                  </h3>
-                  <p
-                    className={`text-2xl font-bold mt-2 ${service.popular ? "text-white" : "text-gray-900"}`}
-                  >
-                    {service.price}
-                    <span
-                      className={`text-sm font-normal ${service.popular ? "text-ocean-200" : "text-gray-400"}`}
-                    >
-                      {" "}
-                      quote
-                    </span>
-                  </p>
-                  <p
-                    className={`mt-2 text-sm leading-relaxed flex-1 ${service.popular ? "text-ocean-100" : "text-gray-500"}`}
-                  >
-                    {service.description}
-                  </p>
-
-                  <ul className="mt-5 space-y-2">
-                    {service.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-sm">
-                        <CheckCircle
-                          className={`h-4 w-4 mt-0.5 shrink-0 ${service.popular ? "text-brand-300" : "text-brand-500"}`}
-                        />
-                        <span
-                          className={
-                            service.popular ? "text-ocean-50" : "text-gray-600"
-                          }
-                        >
-                          {f}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <Link
-                    href="/booking"
-                    className={`mt-6 block text-center w-full px-5 py-3 rounded-xl font-semibold text-sm transition-colors duration-200 ${
-                      service.popular
-                        ? "bg-white text-ocean-700 hover:bg-ocean-50"
-                        : "bg-brand-600 text-white hover:bg-brand-700"
-                    }`}
-                  >
-                    Get a Quote
-                  </Link>
+            {/* Home & Residential */}
+            <div className="mb-14">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 text-xs font-semibold px-3 py-1.5 rounded-full">
+                  <Home className="h-3.5 w-3.5" />
+                  Home &amp; Residential
                 </div>
-              ))}
+                <div className="flex-1 h-px bg-gray-200" />
+              </div>
+              <div className="grid sm:grid-cols-3 gap-6">
+                {homeServices.map((service) => (
+                  <div
+                    key={service.title}
+                    className={`relative rounded-3xl p-7 transition-all duration-300 hover:-translate-y-1 flex flex-col ${
+                      service.popular
+                        ? "bg-teal-600 text-white shadow-xl lg:scale-105"
+                        : "bg-white border border-gray-200 hover:shadow-lg"
+                    }`}
+                  >
+                    {service.popular && (
+                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-warm-400 text-warm-900 text-xs font-bold px-4 py-1 rounded-full">
+                        Most Popular
+                      </div>
+                    )}
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-5 ${service.popular ? "bg-white/20" : service.bg}`}>
+                      <service.icon className="h-6 w-6 text-white" />
+                    </div>
+                    <h3 className={`text-lg font-bold font-display ${service.popular ? "text-white" : "text-gray-900"}`}>
+                      {service.title}
+                    </h3>
+                    <p className={`text-2xl font-bold mt-2 ${service.popular ? "text-white" : "text-gray-900"}`}>
+                      {service.price}
+                    </p>
+                    <p className={`mt-2 text-sm leading-relaxed flex-1 ${service.popular ? "text-teal-100" : "text-gray-500"}`}>
+                      {service.description}
+                    </p>
+                    <ul className="mt-5 space-y-2">
+                      {service.features.map((f) => (
+                        <li key={f} className="flex items-start gap-2 text-sm">
+                          <CheckCircle className={`h-4 w-4 mt-0.5 shrink-0 ${service.popular ? "text-emerald-300" : "text-emerald-500"}`} />
+                          <span className={service.popular ? "text-teal-50" : "text-gray-600"}>{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <Link
+                      href="/booking"
+                      className={`mt-6 block text-center w-full px-5 py-3 rounded-xl font-semibold text-sm transition-colors duration-200 ${
+                        service.popular
+                          ? "bg-white text-teal-700 hover:bg-teal-50"
+                          : "bg-emerald-600 text-white hover:bg-emerald-700"
+                      }`}
+                    >
+                      Book Now
+                    </Link>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            {/* Recurring banner */}
-            <div className="mt-14 rounded-3xl bg-brand-700 p-8 md:p-12">
-              <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                <div>
-                  <h3 className="text-2xl font-bold text-white font-display">
-                    Save Up to 20% with a Maintenance Contract
-                  </h3>
-                  <p className="mt-2 text-brand-100/80 max-w-lg">
-                    Weekly, bi-weekly, or monthly service plans tailored to your
-                    facility. No long-term contracts, cancel anytime.
-                  </p>
+            {/* Business & Commercial */}
+            <div id="pricing">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="inline-flex items-center gap-2 bg-brand-50 text-brand-700 text-xs font-semibold px-3 py-1.5 rounded-full">
+                  <Briefcase className="h-3.5 w-3.5" />
+                  Business &amp; Commercial
                 </div>
-                <Link
-                  href="/booking"
-                  className="group shrink-0 inline-flex items-center gap-2 bg-white text-brand-700 font-bold px-7 py-3.5 rounded-2xl hover:bg-gray-50 transition-colors duration-200"
-                >
-                  Start a Plan
-                  <ArrowRight className="h-5 w-5 group-hover:translate-x-0.5 transition-transform" />
-                </Link>
+                <div className="flex-1 h-px bg-gray-200" />
+              </div>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {services.map((service) => (
+                  <div
+                    key={service.title}
+                    className={`relative rounded-3xl p-7 transition-all duration-300 hover:-translate-y-1 flex flex-col ${
+                      service.popular
+                        ? "bg-ocean-600 text-white shadow-xl lg:scale-105"
+                        : "bg-white border border-gray-200 hover:shadow-lg"
+                    }`}
+                  >
+                    {service.popular && (
+                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-warm-400 text-warm-900 text-xs font-bold px-4 py-1 rounded-full">
+                        Most Popular
+                      </div>
+                    )}
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-5 ${service.popular ? "bg-white/20" : service.bg}`}>
+                      <service.icon className="h-6 w-6 text-white" />
+                    </div>
+                    <h3 className={`text-lg font-bold ${service.popular ? "text-white" : "text-gray-900"} font-display`}>
+                      {service.title}
+                    </h3>
+                    <p className={`text-2xl font-bold mt-2 ${service.popular ? "text-white" : "text-gray-900"}`}>
+                      {service.price}
+                      <span className={`text-sm font-normal ${service.popular ? "text-ocean-200" : "text-gray-400"}`}>
+                        {" "}quote
+                      </span>
+                    </p>
+                    <p className={`mt-2 text-sm leading-relaxed flex-1 ${service.popular ? "text-ocean-100" : "text-gray-500"}`}>
+                      {service.description}
+                    </p>
+                    <ul className="mt-5 space-y-2">
+                      {service.features.map((f) => (
+                        <li key={f} className="flex items-start gap-2 text-sm">
+                          <CheckCircle className={`h-4 w-4 mt-0.5 shrink-0 ${service.popular ? "text-brand-300" : "text-brand-500"}`} />
+                          <span className={service.popular ? "text-ocean-50" : "text-gray-600"}>{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <Link
+                      href="/booking"
+                      className={`mt-6 block text-center w-full px-5 py-3 rounded-xl font-semibold text-sm transition-colors duration-200 ${
+                        service.popular
+                          ? "bg-white text-ocean-700 hover:bg-ocean-50"
+                          : "bg-brand-600 text-white hover:bg-brand-700"
+                      }`}
+                    >
+                      Get a Quote
+                    </Link>
+                  </div>
+                ))}
+              </div>
+
+              {/* Recurring banner */}
+              <div className="mt-14 rounded-3xl bg-brand-700 p-8 md:p-12">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                  <div>
+                    <h3 className="text-2xl font-bold text-white font-display">
+                      Save Up to 20% with a Maintenance Contract
+                    </h3>
+                    <p className="mt-2 text-brand-100/80 max-w-lg">
+                      Weekly, bi-weekly, or monthly service plans tailored to your
+                      facility. No long-term contracts, cancel anytime.
+                    </p>
+                  </div>
+                  <Link
+                    href="/booking"
+                    className="group shrink-0 inline-flex items-center gap-2 bg-white text-brand-700 font-bold px-7 py-3.5 rounded-2xl hover:bg-gray-50 transition-colors duration-200"
+                  >
+                    Start a Plan
+                    <ArrowRight className="h-5 w-5 group-hover:translate-x-0.5 transition-transform" />
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

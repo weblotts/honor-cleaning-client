@@ -33,3 +33,5 @@ env/
 
 # Docker dev volumes
 .env.development
+.next/
+*.pack.gz

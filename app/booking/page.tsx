@@ -45,6 +45,8 @@ import {
   Users,
   AlertCircle,
   Pencil,
+  Home,
+  BedDouble,
   type LucideIcon,
 } from 'lucide-react';
 import { CalendarPicker, FormGroup } from '@/components/FormFields';
@@ -212,6 +214,16 @@ function LocalTextarea({
 
 /* ── Quick-size presets per facility type ── */
 const SIZE_PRESETS: Record<string, { label: string; desc: string; sqft: number; values: Record<string, number> }[]> = {
+  house: [
+    { label: 'Small', desc: '1–2 bed', sqft: 800, values: { bedrooms: 1, bathrooms: 1 } },
+    { label: 'Medium', desc: '3–4 bed', sqft: 1800, values: { bedrooms: 3, bathrooms: 2 } },
+    { label: 'Large', desc: '5+ bed', sqft: 3500, values: { bedrooms: 5, bathrooms: 3 } },
+  ],
+  apartment: [
+    { label: 'Studio', desc: 'Studio / 1-bed', sqft: 500, values: { bedrooms: 1, bathrooms: 1 } },
+    { label: 'Medium', desc: '2-bed unit', sqft: 1000, values: { bedrooms: 2, bathrooms: 1 } },
+    { label: 'Large', desc: '3-bed unit', sqft: 1600, values: { bedrooms: 3, bathrooms: 2 } },
+  ],
   office: [
     { label: 'Small', desc: 'Startup / Suite', sqft: 1500, values: { floors: 1, workstations: 10, restrooms: 1, privateOffices: 1, conferenceRooms: 1, kitchenettes: 1 } },
     { label: 'Medium', desc: 'Mid-size company', sqft: 5000, values: { floors: 1, workstations: 30, restrooms: 3, privateOffices: 4, conferenceRooms: 2, kitchenettes: 1 } },
@@ -236,18 +248,34 @@ const SIZE_PRESETS: Record<string, { label: string; desc: string; sqft: number; 
 
 const STEPS = ['Service', 'Details', 'When & Where', 'Review'];
 
-const FACILITY_TYPES = [
+const RESIDENTIAL_TYPES = [
+  { value: 'house', label: 'House / Home', desc: 'Single-family homes, townhouses', icon: Home, color: 'bg-emerald-600' },
+  { value: 'apartment', label: 'Apartment / Condo', desc: 'Studios, units, condos, lofts', icon: Building2, color: 'bg-teal-600' },
+];
+
+const COMMERCIAL_TYPES = [
   { value: 'office', label: 'Office', desc: 'Corporate, coworking, shared office', icon: Briefcase, color: 'bg-brand-600' },
   { value: 'retail', label: 'Retail / Storefront', desc: 'Shops, boutiques, showrooms', icon: Store, color: 'bg-ocean-600' },
   { value: 'medical', label: 'Medical / Clinic', desc: 'Healthcare, dental, wellness', icon: Stethoscope, color: 'bg-warm-500' },
   { value: 'industrial', label: 'Industrial / Warehouse', desc: 'Warehouses, factories, depots', icon: Warehouse, color: 'bg-violet-600' },
 ];
 
-const SERVICE_LEVELS = [
+const FACILITY_TYPES = [...RESIDENTIAL_TYPES, ...COMMERCIAL_TYPES];
+
+const RESIDENTIAL_SERVICE_LEVELS = [
+  { value: 'standard', label: 'Standard Clean', desc: 'Regular home maintenance', icon: Sparkles, color: 'bg-emerald-600' },
+  { value: 'deep', label: 'Deep Clean', desc: 'Top-to-bottom intensive clean', icon: SprayCan, color: 'bg-teal-600', popular: true },
+  { value: 'moveIn', label: 'Move-In Clean', desc: 'Fresh start for your new home', icon: DoorOpen, color: 'bg-warm-500' },
+  { value: 'moveOut', label: 'Move-Out Clean', desc: 'Leave it spotless for the next tenant', icon: Layers, color: 'bg-violet-600' },
+];
+
+const COMMERCIAL_SERVICE_LEVELS = [
   { value: 'standard', label: 'Standard', desc: 'Regular maintenance clean', icon: Briefcase, color: 'bg-brand-600' },
   { value: 'deep', label: 'Deep Clean', desc: 'Intensive top-to-bottom scrub', icon: SprayCan, color: 'bg-ocean-600', popular: true },
   { value: 'postConstruction', label: 'Post-Construction', desc: 'Debris removal & polish', icon: HardHat, color: 'bg-warm-500' },
 ];
+
+const SERVICE_LEVELS = COMMERCIAL_SERVICE_LEVELS;
 
 const FREQUENCY_OPTIONS = [
   {
@@ -379,8 +407,8 @@ export default function BookingPage() {
   const [direction, setDirection] = useState<'forward' | 'back'>('forward');
 
   const [form, setFormRaw] = useState({
-    facilityType: '' as 'office' | 'retail' | 'medical' | 'industrial' | '',
-    serviceLevel: '' as 'standard' | 'deep' | 'postConstruction' | '',
+    facilityType: '' as 'house' | 'apartment' | 'office' | 'retail' | 'medical' | 'industrial' | '',
+    serviceLevel: '' as 'standard' | 'deep' | 'moveIn' | 'moveOut' | 'postConstruction' | '',
     isRecurring: false,
     scheduledDate: '',
     scheduledTime: '18:00',
@@ -388,6 +416,10 @@ export default function BookingPage() {
     notes: '',
     marketingConsent: false,
     propertyDetails: {
+      // Residential
+      bedrooms: 2,
+      bathrooms: 1,
+      // Commercial
       floors: 1,
       workstations: 10,
       restrooms: 2,
@@ -429,7 +461,18 @@ export default function BookingPage() {
 
   const isRecurring = form.isRecurring;
 
+  const facilityIsResidential = form.facilityType === 'house' || form.facilityType === 'apartment';
+
   const resolvedServiceType = (): ServiceType => {
+    if (facilityIsResidential) {
+      switch (form.serviceLevel) {
+        case 'standard': return ServiceType.Standard;
+        case 'deep': return ServiceType.Deep;
+        case 'moveIn': return ServiceType.MoveIn;
+        case 'moveOut': return ServiceType.MoveOut;
+        default: return ServiceType.Standard;
+      }
+    }
     switch (form.facilityType) {
       case 'office': return ServiceType.Office;
       case 'retail': return ServiceType.Retail;
@@ -438,6 +481,8 @@ export default function BookingPage() {
       default: return ServiceType.Office;
     }
   };
+
+  const activeServiceLevels = facilityIsResidential ? RESIDENTIAL_SERVICE_LEVELS : COMMERCIAL_SERVICE_LEVELS;
 
   const selectedFacility = FACILITY_TYPES.find((f) => f.value === form.facilityType);
   const selectedLevel = SERVICE_LEVELS.find((l) => l.value === form.serviceLevel);
@@ -451,12 +496,27 @@ export default function BookingPage() {
 
     setLoading(true);
     try {
+      const propertyDetails = facilityIsResidential
+        ? {
+            bedrooms: form.propertyDetails.bedrooms,
+            bathrooms: form.propertyDetails.bathrooms,
+            squareFootage: form.propertyDetails.squareFootage,
+            condition: form.propertyDetails.condition,
+          }
+        : {
+            floors: form.propertyDetails.floors,
+            workstations: form.propertyDetails.workstations || undefined,
+            restrooms: form.propertyDetails.restrooms,
+            squareFootage: form.propertyDetails.squareFootage,
+            condition: form.propertyDetails.condition,
+          };
+
       await api.post('/bookings', {
         serviceType: resolvedServiceType(),
         scheduledDate: isRecurring ? form.startDate : form.scheduledDate,
         scheduledTime: form.scheduledTime,
         address: form.address,
-        propertyDetails: form.propertyDetails,
+        propertyDetails,
         notes: form.notes,
         marketingConsent: form.marketingConsent,
       });
@@ -473,7 +533,9 @@ export default function BookingPage() {
   const canProceed = () => {
     switch (step) {
       case 0: return !!form.facilityType && !!form.serviceLevel;
-      case 1: return form.propertyDetails.floors >= 1;
+      case 1: return facilityIsResidential
+        ? form.propertyDetails.bedrooms >= 1
+        : form.propertyDetails.floors >= 1;
       case 2: {
         const hasAddress = !!form.address.street && !!form.address.city && !!form.address.zip;
         if (isRecurring) {
@@ -597,12 +659,44 @@ export default function BookingPage() {
                 {/* Step 0: Service Selection */}
                 {step === 0 && (
                   <div className="space-y-8">
-                    {/* Facility Type */}
+                    {/* Residential Types */}
                     <div>
-                      <h2 className="text-xl font-bold text-gray-900 mb-1">What type of facility?</h2>
-                      <p className="text-sm text-gray-500 mb-4">Select your commercial space type</p>
+                      <h2 className="text-xl font-bold text-gray-900 mb-1">What needs cleaning?</h2>
+                      <p className="text-sm text-gray-500 mb-4">Select your space type</p>
+
+                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-2">
+                        <Home className="h-3 w-3" /> Home & Residential
+                      </p>
+                      <div className="grid grid-cols-2 gap-3 mb-4">
+                        {RESIDENTIAL_TYPES.map((ft) => (
+                          <button
+                            key={ft.value}
+                            onClick={() => setForm({ ...form, facilityType: ft.value as typeof form.facilityType, serviceLevel: '' })}
+                            className={`rounded-2xl border-2 p-5 text-left transition-all duration-200 group ${
+                              form.facilityType === ft.value
+                                ? 'border-emerald-500 bg-emerald-50/50 shadow-md shadow-emerald-500/10'
+                                : 'border-gray-100 hover:border-gray-200 hover:shadow-sm'
+                            }`}
+                          >
+                            <div className={`w-12 h-12 rounded-xl ${ft.color} flex items-center justify-center group-hover:scale-105 transition-transform mb-3`}>
+                              <ft.icon className="h-6 w-6 text-white" />
+                            </div>
+                            <p className="font-bold text-gray-900">{ft.label}</p>
+                            <p className="text-xs text-gray-500 mt-0.5">{ft.desc}</p>
+                          </button>
+                        ))}
+                      </div>
+
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="flex-1 h-px bg-gray-100" />
+                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                          <Briefcase className="h-3 w-3" /> Commercial & Business
+                        </span>
+                        <div className="flex-1 h-px bg-gray-100" />
+                      </div>
+
                       <div className="grid grid-cols-2 gap-3">
-                        {FACILITY_TYPES.map((ft) => (
+                        {COMMERCIAL_TYPES.map((ft) => (
                           <button
                             key={ft.value}
                             onClick={() => setForm({ ...form, facilityType: ft.value as typeof form.facilityType, serviceLevel: '' })}
@@ -627,14 +721,16 @@ export default function BookingPage() {
                       <div className="animate-slide-up">
                         <h3 className="text-lg font-bold text-gray-900 mb-1">What type of clean?</h3>
                         <p className="text-sm text-gray-500 mb-4">Choose the level of service</p>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                          {SERVICE_LEVELS.map((lvl) => (
+                        <div className={`grid gap-3 ${facilityIsResidential ? 'grid-cols-2' : 'grid-cols-1 sm:grid-cols-3'}`}>
+                          {activeServiceLevels.map((lvl) => (
                             <button
                               key={lvl.value}
                               onClick={() => setForm({ ...form, serviceLevel: lvl.value as typeof form.serviceLevel })}
                               className={`relative rounded-2xl border-2 p-4 text-left transition-all duration-200 group ${
                                 form.serviceLevel === lvl.value
-                                  ? 'border-brand-500 bg-brand-50/50 shadow-md shadow-brand-500/10'
+                                  ? facilityIsResidential
+                                    ? 'border-emerald-500 bg-emerald-50/50 shadow-md shadow-emerald-500/10'
+                                    : 'border-brand-500 bg-brand-50/50 shadow-md shadow-brand-500/10'
                                   : 'border-gray-100 hover:border-gray-200 hover:shadow-sm'
                               }`}
                             >
@@ -692,6 +788,8 @@ export default function BookingPage() {
                 {step === 1 && (() => {
                   const presets = form.facilityType ? SIZE_PRESETS[form.facilityType] || [] : [];
                   const facilityLabels: Record<string, { title: string; subtitle: string }> = {
+                    house: { title: 'Tell Us About Your Home', subtitle: 'Help us plan the right team and supplies for your space.' },
+                    apartment: { title: 'Tell Us About Your Apartment', subtitle: 'Help us plan the right team and supplies for your unit.' },
                     office: { title: 'Tell Us About Your Office', subtitle: 'Help us understand your workspace so we can tailor an accurate cleaning plan.' },
                     retail: { title: 'Tell Us About Your Store', subtitle: 'Describe your retail space so we can plan the right crew and equipment.' },
                     medical: { title: 'Tell Us About Your Practice', subtitle: 'We need these details to ensure proper sanitization protocols and compliance.' },
@@ -768,24 +866,52 @@ export default function BookingPage() {
                       <div>
                         <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Space Layout</p>
                         <div className="grid grid-cols-2 gap-3">
-                          <CounterCard
-                            label="Floors"
-                            icon={Layers}
-                            value={form.propertyDetails.floors}
-                            min={1}
-                            max={50}
-                            step={1}
-                            onChange={(v) => setForm({ ...form, propertyDetails: { ...form.propertyDetails, floors: v } })}
-                          />
-                          <CounterCard
-                            label="Restrooms"
-                            icon={Bath}
-                            value={form.propertyDetails.restrooms}
-                            min={0}
-                            max={50}
-                            step={1}
-                            onChange={(v) => setForm({ ...form, propertyDetails: { ...form.propertyDetails, restrooms: v } })}
-                          />
+                          {/* ── Residential counters ── */}
+                          {facilityIsResidential && (
+                            <CounterCard
+                              label="Bedrooms"
+                              icon={BedDouble}
+                              value={form.propertyDetails.bedrooms}
+                              min={1}
+                              max={20}
+                              step={1}
+                              onChange={(v) => setForm({ ...form, propertyDetails: { ...form.propertyDetails, bedrooms: v } })}
+                            />
+                          )}
+                          {facilityIsResidential && (
+                            <CounterCard
+                              label="Bathrooms"
+                              icon={Bath}
+                              value={form.propertyDetails.bathrooms}
+                              min={1}
+                              max={15}
+                              step={1}
+                              onChange={(v) => setForm({ ...form, propertyDetails: { ...form.propertyDetails, bathrooms: v } })}
+                            />
+                          )}
+                          {/* ── Commercial counters ── */}
+                          {!facilityIsResidential && (
+                            <CounterCard
+                              label="Floors"
+                              icon={Layers}
+                              value={form.propertyDetails.floors}
+                              min={1}
+                              max={50}
+                              step={1}
+                              onChange={(v) => setForm({ ...form, propertyDetails: { ...form.propertyDetails, floors: v } })}
+                            />
+                          )}
+                          {!facilityIsResidential && (
+                            <CounterCard
+                              label="Restrooms"
+                              icon={Bath}
+                              value={form.propertyDetails.restrooms}
+                              min={0}
+                              max={50}
+                              step={1}
+                              onChange={(v) => setForm({ ...form, propertyDetails: { ...form.propertyDetails, restrooms: v } })}
+                            />
+                          )}
                           {form.facilityType === 'office' && (
                             <CounterCard
                               label="Workstations"
@@ -901,6 +1027,8 @@ export default function BookingPage() {
                               ? [5000, 10000, 20000, 50000, 100000]
                               : form.facilityType === 'retail'
                               ? [500, 1000, 2000, 5000, 10000]
+                              : facilityIsResidential
+                              ? [500, 800, 1200, 1800, 2500]
                               : [1000, 2500, 5000, 10000, 20000]
                             ).map((val) => (
                               <button
@@ -937,6 +1065,7 @@ export default function BookingPage() {
                               label: 'Well-Kept',
                               desc: form.facilityType === 'medical' ? 'Regular sanitization in place'
                                 : form.facilityType === 'industrial' ? 'Maintained on a schedule'
+                                : facilityIsResidential ? 'Tidied regularly'
                                 : 'Cleaned regularly',
                               activeBorder: 'border-brand-500',
                               activeBg: 'bg-brand-50/60',
@@ -1005,25 +1134,41 @@ export default function BookingPage() {
                       <div className={`rounded-2xl p-4 flex items-start gap-3 ${
                         form.facilityType === 'medical'
                           ? 'bg-warm-50 border border-warm-100'
+                          : facilityIsResidential
+                          ? 'bg-emerald-50 border border-emerald-100'
                           : 'bg-ocean-50 border border-ocean-100'
                       }`}>
                         <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
-                          form.facilityType === 'medical' ? 'bg-warm-100' : 'bg-ocean-100'
+                          form.facilityType === 'medical' ? 'bg-warm-100'
+                          : facilityIsResidential ? 'bg-emerald-100'
+                          : 'bg-ocean-100'
                         }`}>
-                          <Sparkles className={`h-4 w-4 ${form.facilityType === 'medical' ? 'text-warm-600' : 'text-ocean-600'}`} />
+                          <Sparkles className={`h-4 w-4 ${
+                            form.facilityType === 'medical' ? 'text-warm-600'
+                            : facilityIsResidential ? 'text-emerald-600'
+                            : 'text-ocean-600'
+                          }`} />
                         </div>
                         <div>
                           <p className={`text-xs font-semibold mb-0.5 ${
-                            form.facilityType === 'medical' ? 'text-warm-800' : 'text-ocean-800'
+                            form.facilityType === 'medical' ? 'text-warm-800'
+                            : facilityIsResidential ? 'text-emerald-800'
+                            : 'text-ocean-800'
                           }`}>
+                            {form.facilityType === 'house' && 'Home Cleaning Tailored to You'}
+                            {form.facilityType === 'apartment' && 'Apartment Cleaning Done Right'}
                             {form.facilityType === 'office' && 'Tailored Office Plans'}
                             {form.facilityType === 'retail' && 'Retail-Ready Every Day'}
                             {form.facilityType === 'medical' && 'Healthcare Compliance'}
                             {form.facilityType === 'industrial' && 'Industrial-Grade Equipment'}
                           </p>
                           <p className={`text-xs leading-relaxed ${
-                            form.facilityType === 'medical' ? 'text-warm-700/80' : 'text-ocean-700/80'
+                            form.facilityType === 'medical' ? 'text-warm-700/80'
+                            : facilityIsResidential ? 'text-emerald-700/80'
+                            : 'text-ocean-700/80'
                           }`}>
+                            {form.facilityType === 'house' && 'We bring all eco-friendly supplies and equipment. Every room gets attention — from kitchen surfaces to baseboards.'}
+                            {form.facilityType === 'apartment' && 'Our team works efficiently in apartment layouts, covering every corner including appliances and common-area surfaces.'}
                             {form.facilityType === 'office' && 'We customize your checklist based on your layout — open floors, private offices, and shared spaces each get tailored attention.'}
                             {form.facilityType === 'retail' && 'Our retail service includes floor care, glass polishing, display dusting, and high-traffic entrance maintenance.'}
                             {form.facilityType === 'medical' && 'We use EPA-approved sanitization protocols and provide compliance documentation for your records.'}
@@ -1330,16 +1475,28 @@ export default function BookingPage() {
                         <div className="p-4 sm:p-5 flex items-start gap-3 group">
                           <Building2 className="h-5 w-5 text-gray-400 mt-0.5 shrink-0" />
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-semibold text-gray-900">
-                              {form.propertyDetails.floors} floor{form.propertyDetails.floors > 1 ? 's' : ''} · {form.propertyDetails.workstations} workstations · {form.propertyDetails.restrooms} restroom{form.propertyDetails.restrooms !== 1 ? 's' : ''}
-                              {form.propertyDetails.squareFootage ? ` · ~${form.propertyDetails.squareFootage.toLocaleString()} sq ft` : ''}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {form.propertyDetails.privateOffices > 0 && `${form.propertyDetails.privateOffices} private offices · `}
-                              {form.propertyDetails.conferenceRooms > 0 && `${form.propertyDetails.conferenceRooms} conference rooms · `}
-                              {form.propertyDetails.kitchenettes > 0 && `${form.propertyDetails.kitchenettes} break rooms · `}
-                              <span className="capitalize">{form.propertyDetails.condition} condition</span>
-                            </p>
+                            {facilityIsResidential ? (
+                              <>
+                                <p className="text-sm font-semibold text-gray-900">
+                                  {form.propertyDetails.bedrooms} bed · {form.propertyDetails.bathrooms} bath
+                                  {form.propertyDetails.squareFootage ? ` · ~${form.propertyDetails.squareFootage.toLocaleString()} sq ft` : ''}
+                                </p>
+                                <p className="text-xs text-gray-500 capitalize">{form.propertyDetails.condition} condition</p>
+                              </>
+                            ) : (
+                              <>
+                                <p className="text-sm font-semibold text-gray-900">
+                                  {form.propertyDetails.floors} floor{form.propertyDetails.floors > 1 ? 's' : ''} · {form.propertyDetails.workstations} workstations · {form.propertyDetails.restrooms} restroom{form.propertyDetails.restrooms !== 1 ? 's' : ''}
+                                  {form.propertyDetails.squareFootage ? ` · ~${form.propertyDetails.squareFootage.toLocaleString()} sq ft` : ''}
+                                </p>
+                                <p className="text-xs text-gray-500">
+                                  {form.propertyDetails.privateOffices > 0 && `${form.propertyDetails.privateOffices} private offices · `}
+                                  {form.propertyDetails.conferenceRooms > 0 && `${form.propertyDetails.conferenceRooms} conference rooms · `}
+                                  {form.propertyDetails.kitchenettes > 0 && `${form.propertyDetails.kitchenettes} break rooms · `}
+                                  <span className="capitalize">{form.propertyDetails.condition} condition</span>
+                                </p>
+                              </>
+                            )}
                           </div>
                           <button
                             onClick={() => setStep(1)}
@@ -1495,7 +1652,12 @@ export default function BookingPage() {
                         <span className="font-medium text-gray-700">~{form.propertyDetails.squareFootage.toLocaleString()} sq ft</span>
                       </div>
                     )}
-                    {form.propertyDetails.floors >= 1 && (
+                    {facilityIsResidential ? (
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Layout</span>
+                        <span className="font-medium text-gray-700">{form.propertyDetails.bedrooms} bed · {form.propertyDetails.bathrooms} bath</span>
+                      </div>
+                    ) : form.propertyDetails.floors >= 1 && (
                       <div className="flex justify-between">
                         <span className="text-gray-500">Layout</span>
                         <span className="font-medium text-gray-700">{form.propertyDetails.floors}F · {form.propertyDetails.restrooms}BR</span>
