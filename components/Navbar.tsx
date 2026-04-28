@@ -8,24 +8,12 @@ import { Menu, X, ChevronRight, LayoutDashboard, LogOut, User } from 'lucide-rea
 import { useAuth } from '@/hooks/useAuth';
 import { UserRole } from '@/types';
 import colouredLogo from '@/assets/HonorCleaners-ColouredLogo.png';
-import whiteLogo from '@/assets/HonorCleaners-WhiteLogo.png';
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const { user, isAuthenticated, logout } = useAuth();
   const mobileMenuRef = useRef<HTMLDivElement>(null);
-
-  // Only use transparent style on homepage before scrolling
-  const isHome = pathname === '/';
-  const solid = !isHome || scrolled;
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -86,23 +74,17 @@ export default function Navbar() {
 
   return (
     <>
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          solid
-            ? 'bg-white/90 backdrop-blur-xl shadow-lg shadow-gray-900/5 border-b border-gray-100'
-            : 'bg-transparent'
-        }`}
-      >
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl shadow-sm border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16 sm:h-18">
             {/* Logo */}
             <Link href="/" className="flex items-center shrink-0 group">
               <Image
-                src={solid ? colouredLogo : whiteLogo}
+                src={colouredLogo}
                 alt="Honor Cleaning Co."
                 height={36}
                 style={{ width: 'auto', height: '36px' }}
-                className="transition-opacity duration-300 group-hover:opacity-80"
+                className="group-hover:opacity-80 transition-opacity"
                 priority
               />
             </Link>
@@ -113,39 +95,26 @@ export default function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
-                    solid
-                      ? 'text-gray-600 hover:text-brand-600 hover:bg-brand-50'
-                      : 'text-white/80 hover:text-white hover:bg-white/10'
-                  }`}
+                  className="px-4 py-2 rounded-xl text-sm font-medium text-gray-600 hover:text-brand-600 hover:bg-brand-50 transition-colors"
                 >
                   {link.label}
                 </Link>
               ))}
 
-              <div className={`w-px h-6 mx-2 ${solid ? 'bg-gray-200' : 'bg-white/20'}`} />
+              <div className="w-px h-6 mx-2 bg-gray-200" />
 
               {isAuthenticated ? (
                 <>
-                  {/* Dashboard button — prominent, always visible */}
                   <Link
                     href={getDashboardLink()}
-                    className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
-                      solid
-                        ? 'text-brand-700 bg-brand-50 border border-brand-200 hover:bg-brand-100 hover:shadow-sm'
-                        : 'text-white bg-white/15 border border-white/20 backdrop-blur-sm hover:bg-white/25'
-                    }`}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-brand-700 bg-brand-50 border border-brand-200 hover:bg-brand-100 transition-colors"
                   >
                     <LayoutDashboard className="h-4 w-4" />
                     {getDashboardLabel()}
                   </Link>
                   <button
                     onClick={() => logout()}
-                    className={`p-2 rounded-xl transition-all duration-200 ${
-                      solid
-                        ? 'text-gray-400 hover:text-red-600 hover:bg-red-50'
-                        : 'text-white/50 hover:text-white hover:bg-white/10'
-                    }`}
+                    className="p-2 rounded-xl text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors"
                     title="Logout"
                   >
                     <LogOut className="h-4 w-4" />
@@ -154,11 +123,7 @@ export default function Navbar() {
               ) : (
                 <Link
                   href="/login"
-                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
-                    solid
-                      ? 'text-gray-600 hover:text-brand-600 hover:bg-brand-50'
-                      : 'text-white/80 hover:text-white hover:bg-white/10'
-                  }`}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-gray-600 hover:text-brand-600 hover:bg-brand-50 transition-colors"
                 >
                   <User className="h-4 w-4" />
                   Sign In
@@ -167,14 +132,10 @@ export default function Navbar() {
 
               <Link
                 href="/booking"
-                className={`ml-2 inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors duration-200 ${
-                  solid
-                    ? 'bg-brand-600 text-white hover:bg-brand-700'
-                    : 'bg-white text-brand-700 hover:bg-gray-50'
-                }`}
+                className="ml-2 inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-semibold bg-brand-600 text-white hover:bg-brand-700 transition-colors"
               >
                 Free Quote
-                <ChevronRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+                <ChevronRight className="h-4 w-4" />
               </Link>
             </div>
 
@@ -183,11 +144,7 @@ export default function Navbar() {
               {isAuthenticated && (
                 <Link
                   href={getDashboardLink()}
-                  className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-200 ${
-                    solid
-                      ? 'text-brand-700 bg-brand-50 border border-brand-200'
-                      : 'text-white bg-white/15 border border-white/20 backdrop-blur-sm'
-                  }`}
+                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-brand-700 bg-brand-50 border border-brand-200 transition-colors"
                 >
                   <LayoutDashboard className="h-3.5 w-3.5" />
                   <span className="hidden sm:inline">{getDashboardLabel()}</span>
@@ -195,9 +152,7 @@ export default function Navbar() {
                 </Link>
               )}
               <button
-                className={`p-2 rounded-xl transition-colors ${
-                  solid ? 'text-gray-700 hover:bg-gray-100' : 'text-white hover:bg-white/10'
-                }`}
+                className="p-2 rounded-xl text-gray-700 hover:bg-gray-100 transition-colors"
                 onClick={() => setMobileOpen(!mobileOpen)}
                 aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
               >
